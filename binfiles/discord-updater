@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [ ! -e ~/Downloads/discord-0.*.gz ]; then
+    echo "Installation support not found. Please download the update."
+    exit 1
+fi
+
+tar -xzf ~/Downloads/discord-0.*.gz -C ~/Downloads &&
+rm -rf ~/App/Discord &&
+mv ~/Downloads/Discord ~/App/ &&
+rm ~/Downloads/discord-0.*.gz

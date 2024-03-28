@@ -1,0 +1,18 @@
+"amixer set Master toggle"
+  XF86AudioMute
+
+"amixer set Master 1%+"
+  XF86AudioRaiseVolume
+
+"amixer set Master 1%-"
+  XF86AudioLowerVolume
+
+"playerctl previous"
+    XF86AudioPrev
+
+"playerctl next"
+    XF86AudioNext
+
+"playerctl play-pause"
+    XF86AudioPlay
+
