@@ -22,3 +22,5 @@ cd "$SYS_DIR/suckless/dwm" && make clean install
 cd "$SYS_DIR/suckless/st" && make clean install
 cd "$SYS_DIR/suckless/dmenu" && make clean install
 cd "$SYS_DIR/suckless/slock" && make clean install
+
+groupadd nogroup
