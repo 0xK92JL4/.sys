@@ -1,4 +1,4 @@
-# Set environnement
+# Set environment
 xrandr --output Virtual-1 --mode 1920x1080
 xwallpaper --center ~/sys/wallpaper/*
 xset r rate 300 25

@@ -16,4 +16,5 @@ alias cpgpt='{ \
     cat main.c; \
 } | xclip -selection clipboard'
 
-alias token='cat ~/.token/* | xclip -selection clipboard'
+token_() { cat ~/.token/"$1" | xclip -selection clipboard; }
+alias token='token_'
