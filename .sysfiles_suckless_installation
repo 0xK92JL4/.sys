@@ -4,7 +4,6 @@ SYS_DIR="/home/$USER/.sys"
 # install custom system files + suckless softwares
 cd /home/$USER
 
-rm .bashrc
 for file in "$SYS_DIR/dotfiles"/.*; do
     ln -sf "$file" "/home/$USER/"
 done
@@ -17,6 +16,9 @@ mkdir /home/$USER/.config
 for file in "$SYS_DIR/config"/*; do
     ln -sf "$file" "/home/$USER/.config/"
 done
+
+ln -sf "$SYS_DIR/dotfiles/.bashrc" /root
+ln -sf "$SYS_DIR/dotfiles/.vimrc" /root
 
 cd "$SYS_DIR/suckless/dwm" && make clean install
 cd "$SYS_DIR/suckless/st" && make clean install
