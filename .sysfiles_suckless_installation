@@ -1,0 +1,24 @@
+USER="ugo"
+SYS_DIR="/home/$USER/.sys"
+
+# install custom system files + suckless softwares
+cd /home/$USER
+
+rm .bashrc
+for file in "$SYS_DIR/dotfiles"/*; do
+    ln -s "$file" "/home/$USER/"
+done
+
+for file in "$SYS_DIR/binfiles"/*; do
+    ln "$file" "/usr/local/bin/"
+done
+
+mkdir /home/$USER/.config
+for file in "$SYS_DIR/config"/*; do
+    ln -s "$file" "/home/$USER/.config/"
+done
+
+cd "$SYS_DIR/suckless/dwm" && make clean install
+cd "$SYS_DIR/suckless/st" && make clean install
+cd "$SYS_DIR/suckless/dmenu" && make clean install
+cd "$SYS_DIR/suckless/slock" && make clean install
