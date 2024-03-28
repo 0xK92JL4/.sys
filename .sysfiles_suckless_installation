@@ -28,4 +28,4 @@ groupadd nogroup
 
 # install discord
 mkdir /usr/local/apps
-
+/usr/local/bin/discord-updater
