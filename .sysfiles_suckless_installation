@@ -5,17 +5,17 @@ SYS_DIR="/home/$USER/.sys"
 cd /home/$USER
 
 rm .bashrc
-for file in "$SYS_DIR/dotfiles"/*; do
-    ln -s "$file" "/home/$USER/"
+for file in "$SYS_DIR/dotfiles"/.*; do
+    ln -sf "$file" "/home/$USER/"
 done
 
 for file in "$SYS_DIR/binfiles"/*; do
-    ln "$file" "/usr/local/bin/"
+    ln -f "$file" "/usr/local/bin/"
 done
 
 mkdir /home/$USER/.config
 for file in "$SYS_DIR/config"/*; do
-    ln -s "$file" "/home/$USER/.config/"
+    ln -sf "$file" "/home/$USER/.config/"
 done
 
 cd "$SYS_DIR/suckless/dwm" && make clean install
