@@ -32,6 +32,7 @@ cd "$SYS_DIR/suckless/dmenu" && make clean install
 cd "$SYS_DIR/suckless/slock" && make clean install
 groupadd nogroup
 
+### no until pacman broke again 
 # install discord
-mkdir -p /usr/local/apps
-/usr/local/bin/discord-updater
+#mkdir -p /usr/local/apps
+#/usr/local/bin/discord-updater
