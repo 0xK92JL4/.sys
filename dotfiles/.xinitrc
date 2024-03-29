@@ -8,7 +8,7 @@ setxkbmap -option caps:escape
 ~/.sys/statusbar/time.sh &
 
 # Launch apps
-/usr/local/apps/Discord/Discord &
+discord &
 dunst &
 lollypop &
 
