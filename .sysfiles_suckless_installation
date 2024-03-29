@@ -20,8 +20,9 @@ ln -sf "$SYS_DIR/dotfiles/.bashrc" /root
 ln -sf "$SYS_DIR/dotfiles/.vimrc" /root
 
 # install font
-curl -L -o ~/Downloads/Hack.zip https://sourceforge.net/projects/nerd-fonts.mirror/files/v3.0.0/Hack.zip/download
-sudo unzip ~/Downloads/Hack.zip -d /usr/share/fonts/
+mkdir /home/$USER/Downloads
+curl -L -o /home/$USER/Downloads/Hack.zip https://sourceforge.net/projects/nerd-fonts.mirror/files/v3.0.0/Hack.zip/download
+sudo unzip /home/$USER/Downloads/Hack.zip -d /usr/share/fonts/
 
 # install suckless softwares
 cd "$SYS_DIR/suckless/dwm" && make clean install
