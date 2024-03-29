@@ -13,6 +13,7 @@ for file in "$SYS_DIR/binfiles"/*; do
 done
 
 mkdir -p /home/$USER/.config
+chown -R "$USER:$USER" /home/$USER/.config
 for file in "$SYS_DIR/config"/*; do
     ln -sf "$file" "/home/$USER/.config/"
 done
@@ -31,8 +32,3 @@ cd "$SYS_DIR/suckless/st" && make clean install
 cd "$SYS_DIR/suckless/dmenu" && make clean install
 cd "$SYS_DIR/suckless/slock" && make clean install
 groupadd nogroup
-
-### no until pacman broke again 
-# install discord
-#mkdir -p /usr/local/apps
-#/usr/local/bin/discord-updater
