@@ -15,7 +15,7 @@ done
 mkdir -p /home/$USER/.config
 chown -R "$USER:$USER" /home/$USER/.config
 for file in "$SYS_DIR/config"/*; do
-    ln -sf "$file" "/home/$USER/.config/"
+    cp -r "$file" "/home/$USER/.config/"
 done
 
 ln -sf "$SYS_DIR/dotfiles/.bashrc" /root
