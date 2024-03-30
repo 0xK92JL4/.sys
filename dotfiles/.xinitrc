@@ -1,5 +1,5 @@
 # Set environment
-xrandr --output Virtual-1 --mode 1920x1080
+xrandr --output DP-1 --mode 1920x1080 --rate 239.76
 xwallpaper --center ~/.sys/wallpaper/*
 xset r rate 300 25
 xbindkeys &
