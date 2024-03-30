@@ -5,6 +5,7 @@ xset r rate 300 25
 xbindkeys &
 unclutter -idle 1 &
 setxkbmap -option caps:escape
+numlockx &
 ~/.sys/statusbar/time.sh &
 
 # Launch apps
