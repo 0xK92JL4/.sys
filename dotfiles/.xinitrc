@@ -11,6 +11,5 @@ numlockx &
 # Launch apps
 discord &
 dunst &
-lollypop &
 
 exec dwm
