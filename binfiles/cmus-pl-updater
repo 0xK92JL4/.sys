@@ -1,0 +1,17 @@
+#!/bin/bash
+
+MUSIC_DIR="/home/ugo/Music"
+CMUS_PLAYLISTS_DIR="/home/ugo/.config/cmus/playlists"
+
+PLAYLISTS=("A" "B" "C" "D" "S" "SS")
+
+rm $CMUS_PLAYLISTS_DIR/default
+
+for PL_NAME in "${PLAYLISTS[@]}"
+do
+    find "$MUSIC_DIR/$PL_NAME" -type f -exec echo "{}" \; > "$CMUS_PLAYLISTS_DIR/$PL_NAME"
+done
+
+find "$MUSIC_DIR/A" "$MUSIC_DIR/S" "$MUSIC_DIR/SS" -type f -exec echo "{}" \; > "$CMUS_PLAYLISTS_DIR/A+"
+
+find "$MUSIC_DIR/S" "$MUSIC_DIR/SS" -type f -exec echo "{}" \; > "$CMUS_PLAYLISTS_DIR/S+"

@@ -1,2 +1,3 @@
 #!/bin/bash
+cmus-pl-updater
 st cmus
