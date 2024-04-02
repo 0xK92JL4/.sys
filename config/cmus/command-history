@@ -1,4 +1,15 @@
 clear
+q
+add /home/ugo/PICARD/
+noh
+add /home/ugo/Music/
+load /home/ugo/PICARD/A
+load /home/ugo/PICARD/*
+add /home/ugo/PICARD/SS
+add /home/ugo/Music/SS
+add /home/ugo/S
+add /home/ugo/Music/A
+add /home/ugo/PICARD/A
 wq
 add /home/ugo/Music/D/
 pl A
@@ -123,11 +134,9 @@ colorscheme dracula
 colorscheme default
 colorscheme
 set config
-q
 load SS
 save SS
 add /home/ugo/Music/SS/
 clear 
 add Music/Musique/A+/
-add /home/ugo/Music/
 add /home/ugo/

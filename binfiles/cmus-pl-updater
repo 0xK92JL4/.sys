@@ -3,7 +3,7 @@
 MUSIC_DIR="/home/ugo/Music"
 CMUS_PLAYLISTS_DIR="/home/ugo/.config/cmus/playlists"
 
-PLAYLISTS=("A" "B" "C" "D" "S" "SS")
+PLAYLISTS=("A" "B" "C" "S" "SS")
 
 rm $CMUS_PLAYLISTS_DIR/default
 
