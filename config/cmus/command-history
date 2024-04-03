@@ -1,6 +1,7 @@
 q
-add Music/
 clear
+reshuffle 
+add Music/
 add /home/ugo/PICARD/
 add /home/ugo/Music/
 jama
