@@ -90,8 +90,8 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
-	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
-	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
+	{ MODKEY,                       XK_n,      incnmaster,     {.i = +1 } },
+	{ MODKEY,                       XK_v,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
 	{ MODKEY,                       XK_Return, zoom,           {0} },
@@ -120,7 +120,7 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	TAGKEYS(                        XK_0,                      9)
-	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+	{ MODKEY|ControlMask|ShiftMask, XK_q,      quit,           {0} },
 	{ MODKEY|ShiftMask,             XK_l,      spawn,          SHCMD("slock") },
 	{ MODKEY|ControlMask,           XK_s,      spawn,          SHCMD("pacmd set-default-sink alsa_output.pci-0000_0c_00.4.analog-stereo") },
 	{ MODKEY|ControlMask,           XK_h,      spawn,          SHCMD("pacmd set-default-sink alsa_output.usb-Corsair_CORSAIR_HS70_Pro_Wireless_Gaming_Headset-00.analog-stereo") },

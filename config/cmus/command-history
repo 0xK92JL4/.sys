@@ -1,8 +1,11 @@
-clear
 q
+add Music/
+clear
 add /home/ugo/PICARD/
-noh
 add /home/ugo/Music/
+jama
+clear 
+noh
 load /home/ugo/PICARD/A
 load /home/ugo/PICARD/*
 add /home/ugo/PICARD/SS
@@ -137,6 +140,5 @@ set config
 load SS
 save SS
 add /home/ugo/Music/SS/
-clear 
 add Music/Musique/A+/
 add /home/ugo/
