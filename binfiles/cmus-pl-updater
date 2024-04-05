@@ -1,7 +1,7 @@
 #!/bin/bash
 
-MUSIC_DIR="/home/ugo/Music"
-CMUS_PLAYLISTS_DIR="/home/ugo/.config/cmus/playlists"
+MUSIC_DIR="/home/$NUSER/Music"
+CMUS_PLAYLISTS_DIR="/home/$NUSER/.config/cmus/playlists"
 
 PLAYLISTS=("A" "B" "C" "S" "SS")
 

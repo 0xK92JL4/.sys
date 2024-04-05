@@ -1,12 +1,12 @@
 # Set environment
 xrandr --output DP-1 --mode 1920x1080 --rate 239.76
-xwallpaper --center ~/.sys/wallpaper/*
+xwallpaper --center /home/$NUSER/.sys/wallpaper/*
 xset r rate 300 25
 xbindkeys &
 unclutter -idle 1 &
 setxkbmap -option caps:escape
 numlockx &
-~/.sys/statusbar/time.sh &
+/home/$NUSER/.sys/statusbar/time.sh &
 
 # Launch apps
 discord &

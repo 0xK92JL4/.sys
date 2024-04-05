@@ -15,4 +15,4 @@ update_st_title() {
 }
 PROMPT_COMMAND=update_st_title
 
-source ~/.bash_aliases
+source /home/$NUSER/.bash_aliases
