@@ -129,7 +129,8 @@ pacman -Syu --noconfirm \
   xorg \
   xorg-xinit \
   xwallpaper \
-  zip
+  zip \
+  zoxide
 
 # setting pulseaudio
 systemctl --user enable pulseaudio.socket
