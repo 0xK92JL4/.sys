@@ -1,11 +1,14 @@
+clear 
+add /home/ugo/Music/
 q
+view e
+wq
+view 3
 clear
 reshuffle 
 add Music/
 add /home/ugo/PICARD/
-add /home/ugo/Music/
 jama
-clear 
 noh
 load /home/ugo/PICARD/A
 load /home/ugo/PICARD/*
@@ -14,7 +17,6 @@ add /home/ugo/Music/SS
 add /home/ugo/S
 add /home/ugo/Music/A
 add /home/ugo/PICARD/A
-wq
 add /home/ugo/Music/D/
 pl A
 plalist
