@@ -123,7 +123,6 @@ pacman -Syu --noconfirm \
   pulseaudio \
   pulseaudio-alsa \
   pulseaudio-bluetooth \
-  ranger \
   unclutter \
   unzip \
   vim \
@@ -154,6 +153,7 @@ ln -sf $SYS_DIR/dotfiles/.* /root
 ln -f $SYS_DIR/binfiles/* /usr/local/bin/
 mkdir -p /home/$NUSER/.config
 ln -sf $SYS_DIR/config/* /home/$NUSER/.config/
+touch /home/$NUSER/.notes
 
 # define ENV variable
 echo NUSER=\"$NUSER\" >> /etc/environment
