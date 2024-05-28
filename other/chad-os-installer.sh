@@ -8,6 +8,7 @@ ROOT_SIZE="100GiB"
 # System 
 HOST_NAME="chad"
 NUSER="ugo"
+EDITOR="vim"
 
 # Temp passwords
 ROOT_PASSWORD="root"
@@ -156,6 +157,7 @@ ln -sf $SYS_DIR/config/* /home/$NUSER/.config/
 
 # define ENV variable
 echo NUSER=\"$NUSER\" >> /etc/environment
+echo EDITOR=$EDITOR >> /etc/environment
 
 # install cmus theme
 mkdir -p /usr/share/cmus
