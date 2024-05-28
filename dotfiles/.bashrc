@@ -17,4 +17,6 @@ PROMPT_COMMAND=update_st_title
 
 eval "$(zoxide init bash)"
 
+cat /home/$NUSER/.notes
+
 source /home/$NUSER/.bash_aliases
