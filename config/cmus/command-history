@@ -1,9 +1,9 @@
+q
 clear
 add ~/Music/
 load Picard/new/
 clear 
 add /home/ugo/Music/
-q
 view e
 wq
 view 3
