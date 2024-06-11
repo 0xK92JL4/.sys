@@ -127,6 +127,7 @@ pacman -Syu --noconfirm \
   unzip \
   vim \
   xbindkeys \
+  xclip \
   xorg \
   xorg-xinit \
   xwallpaper \
