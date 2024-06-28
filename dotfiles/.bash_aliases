@@ -18,7 +18,4 @@ alias cpgpt='{ \
     cat main.c; \
 } | xclip -selection clipboard'
 
-token_() { cat /home/$NUSER/.token/"$1" | xclip -selection clipboard; }
-alias token='token_'
-
 alias odays='sudo -b libreoffice /media/days.ods'
