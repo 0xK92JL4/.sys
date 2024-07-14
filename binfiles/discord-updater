@@ -1,7 +1,0 @@
-#!/bin/bash
-
-curl -o /home/$NUSER/Downloads/discord.tar.gz -L https://discord.com/api/download?platform=linux&format=tar.gz
-tar -xzf /home/$NUSER/Downloads/discord.tar.gz -C /home/$NUSER/Downloads &&
-rm -rf /usr/local/apps/Discord &&
-mv /home/$NUSER/Downloads/Discord /usr/local/apps/ &&
-rm /home/$NUSER/Downloads/discord.tar.gz
