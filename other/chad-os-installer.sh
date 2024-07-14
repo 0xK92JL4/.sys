@@ -98,7 +98,7 @@ echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
 pacman-key --init
 pacman-key --populate archlinux
 
-# Program installing
+# Programs installing
 pacman -Syu --noconfirm \
   alsa-utils \
   cmus \
@@ -144,6 +144,12 @@ pactl set-sink-mute 0 0
 # install custom system files + suckless softwares
 cd /home/$NUSER
 git clone https://github.com/0xK92JL4/.sys.git
+
+######### not tested yet #########
+# Git Programs installing
+cd /opt
+git clone https://github.com/trapd00r/vidir.git
+######### not tested yet #########
 EOF
 
 # install custom system files
@@ -155,6 +161,10 @@ ln -f $SYS_DIR/binfiles/* /usr/local/bin/
 mkdir -p /home/$NUSER/.config
 ln -sf $SYS_DIR/config/* /home/$NUSER/.config/
 touch /home/$NUSER/.notes
+
+######### not tested yet #########
+ln -f /opt/vidir/bin/vidir /usr/local/bin/
+######### not tested yet #########
 
 # define ENV variable
 echo NUSER=\"$NUSER\" >> /etc/environment
