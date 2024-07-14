@@ -1,0 +1,7 @@
+alwayscenter
+colorbar
+cycle_tag
+focusonclick
+smartborder
+tagcolorscheme
+zeroastag

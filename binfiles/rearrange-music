@@ -1,0 +1,8 @@
+#!/bin/bash
+
+MUSIC_DIR="/home/$NUSER/Music"
+PLAYLISTS=("A" "B" "C" "S" "SS")
+
+for playlist in "${PLAYLISTS[@]}"; do
+    find . -type f -name "\[${playlist}\]*" -exec mv -n {} "$MUSIC_DIR/$playlist/" \;
+done
