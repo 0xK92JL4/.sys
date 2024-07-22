@@ -4,6 +4,9 @@ alias mkcd='mkcd_'
 pdf_() { mupdf -r 89 "$@" & }
 alias pdf='pdf_'
 
+fn_() { find . -iname "*$@*"; }
+alias fn='fn_'
+
 alias cca='gcc *.c -Wall -Wextra -Werror && ./a.out'
 alias ccf='gcc *.c -Wall -Wextra -Werror'
 
@@ -18,4 +21,4 @@ alias cpgpt='{ \
     cat main.c; \
 } | xclip -selection clipboard'
 
-alias odays='sudo -b libreoffice /media/days.ods'
+alias odays='sudo -b libreoffice /media/days.ods; sleep 3 && exit'
