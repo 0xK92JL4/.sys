@@ -20,5 +20,3 @@ alias cpgpt='{ \
     echo "main.c"; \
     cat main.c; \
 } | xclip -selection clipboard'
-
-alias odays='sudo -b libreoffice /media/days.ods; sleep 3 && exit'
