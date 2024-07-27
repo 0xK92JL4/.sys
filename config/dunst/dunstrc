@@ -1,6 +1,7 @@
 [global]
 font = HackNerdFontMono-Regular 14
 frame_width = 1
+width = (0, 666) 
 
 [urgency_low]
     background = "#000000"
