@@ -4,7 +4,7 @@ alias mkcd='mkcd_'
 pdf_() { mupdf -r 89 "$@" & }
 alias pdf='pdf_'
 
-fn_() { find . -iname "*$@*"; }
+fn_() { find ~ -iname "*$@*"; }
 alias fn='fn_'
 
 alias cca='gcc *.c -Wall -Wextra -Werror && ./a.out'

@@ -1,3 +1,4 @@
+autocmd VimEnter * normal! '"
 syntax on
 colorscheme koehler
 filetype indent on
