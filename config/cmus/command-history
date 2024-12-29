@@ -1,7 +1,8 @@
-update-cache 
-q
 clear
 add ~/Music/
+add .
+update-cache 
+q
 load Picard/new/
 clear 
 add /home/ugo/Music/
