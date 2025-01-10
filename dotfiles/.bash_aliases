@@ -33,10 +33,10 @@ getlib() {
 
 alias getlib="getlib"
 
-
 alias ll='ls | cat'
 alias ca='vim ~/.bash_aliases'
 alias up='. ~/.bash_aliases'
+alias sk='setxkbmap -option caps:escape'
 alias cca='gcc *.c -Wall -Wextra -Werror && ./a.out'
 alias ccf='gcc *.c -Wall -Wextra -Werror'
 alias ccfl='ccf -pedantic -fno-omit-frame-pointer -fsanitize=address -fsanitize=undefined'
