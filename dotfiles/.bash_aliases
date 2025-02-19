@@ -30,8 +30,22 @@ getlib() {
     [ -d "$dst" ] && rm -rf "$dst"
     cp -r "$src" "$dst"; rm -rf "$dst/.git"
 }
-
 alias getlib="getlib"
+
+err_() {
+    norminette | (grep "Error" || echo "No Error!") | awk '
+    /Error!$/ {
+        count++;
+        if (count > 1) {
+            print "";
+        }
+        print "\033[1;38;2;147;117;42m" $0 "\033[0m";
+        next;
+    }
+    { print "\033[0;38;2;94;123;155m" $0 "\033[0m" }
+    '
+}
+alias err='err_'
 
 alias ll='ls | cat'
 alias ca='vim ~/.bash_aliases'
@@ -52,6 +66,7 @@ alias gl='git pull'
 
 alias clip='xclip -selection clipboard'
 alias cpgpt='{ \
+	tree; \
     for file in *.c; do \
         echo "$file"; \
         cat "$file"; \

@@ -19,4 +19,7 @@ eval "$(zoxide init bash)"
 
 cat /home/$NUSER/.notes
 
+
 source /home/$NUSER/.bash_aliases
+
+export PATH="$PATH:$HOME/.local/bin"
