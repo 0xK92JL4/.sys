@@ -108,6 +108,7 @@ pacman -Syu --noconfirm \
   fontconfig \
   freetype2 \
   htop \
+  libreoffice-fresh \
   libx11 \
   libxft \
   libxinerama \
@@ -116,6 +117,7 @@ pacman -Syu --noconfirm \
   mupdf \
   noto-fonts-cjk \
   noto-fonts-emoji \
+  ntfs-3g \
   numlockx \
   openssh \
   pavucontrol \
