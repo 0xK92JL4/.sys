@@ -32,6 +32,19 @@ getlib() {
 }
 alias getlib="getlib"
 
+cpall_() {
+    ext="${1:-c}"
+    ( \
+        tree
+        for file in *.$ext; do
+            echo "$file"
+            cat "$file"
+            echo
+        done
+    ) | xclip -selection clipboard
+}
+alias cpall='cpall_'
+
 err_() {
     norminette | (grep "Error" || echo "No Error!") | awk '
     /Error!$/ {
@@ -65,11 +78,3 @@ alias gp='git push'
 alias gl='git pull'
 
 alias clip='xclip -selection clipboard'
-alias cpgpt='{ \
-	tree; \
-    for file in *.c; do \
-        echo "$file"; \
-        cat "$file"; \
-        echo; \
-    done; \
-} | xclip -selection clipboard'
