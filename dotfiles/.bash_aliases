@@ -60,6 +60,11 @@ err_() {
 }
 alias err='err_'
 
+r() {
+    eval "$(fc -ln -1)"
+    history -d $(history 1)
+}
+
 alias ll='ls | cat'
 alias ca='vim ~/.bash_aliases'
 alias up='. ~/.bash_aliases'
