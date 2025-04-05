@@ -5,3 +5,4 @@ filetype indent on
 set tabstop=4
 set shiftwidth=4
 set is hls
+command Stdheader :0r !header %

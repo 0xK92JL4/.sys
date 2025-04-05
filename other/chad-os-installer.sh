@@ -72,7 +72,7 @@ editor 0
 EOF2
 
 cat << EOF2 > /boot/loader/entries/arch.conf
-title   Arch Linux
+title   Chad-OS
 linux   /vmlinuz-linux
 initrd  /initramfs-linux.img
 options root=PARTUUID=$(blkid -s PARTUUID -o value /dev/${DEVICE}2) rw
