@@ -14,6 +14,9 @@ EDITOR="vim"
 ROOT_PASSWORD="root"
 NUSER_PASSWORD="$NUSER"
 
+# Chad-OS
+VERSION="v4.3"
+
 ### Installation
 
 # Partitioning
@@ -170,6 +173,7 @@ ln -f /opt/vidir/bin/vidir /usr/local/bin/
 
 # define ENV variable
 echo NUSER=\"$NUSER\" >> /etc/environment
+echo CHAD_OS=\"$VERSION\" >> /etc/environment
 echo EDITOR=$EDITOR >> /etc/environment
 
 # install cmus theme

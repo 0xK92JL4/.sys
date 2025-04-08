@@ -98,6 +98,15 @@ r_() {
 alias r='r_'
 #-------------------------#
 
+## repeat the last last command.
+#-------------------------#
+rr_() {
+	eval "$(history | tail -n 3 | head -n 1 | awk '{$1=""; print $0}')"
+    history -d $(history 1)
+}
+alias rr='rr_'
+#-------------------------#
+
 ## basic aliases.
 #----------------------------------------------------------------------------------------#
 alias sk='setxkbmap -option caps:escape'
