@@ -136,5 +136,6 @@ if [[ -e $HOME/Desktop/README ]]; then
 	rm -rf $HOME/Desktop/README
 fi
 #HE#HE#HE#HAAA#
+source $HOME/.zsh_aliases
 
 #4#4#4#4#4#4#4#4#4#4#4#4#4#4#4#4#4#4#4#4#4#
