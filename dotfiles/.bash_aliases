@@ -121,6 +121,8 @@ alias gst='git status'
 alias gcl='git clone'
 alias gp='git push'
 alias gl='git pull'
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
 
 # TMP
 alias bp='bash --posix'

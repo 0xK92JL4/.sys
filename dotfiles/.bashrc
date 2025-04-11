@@ -3,11 +3,14 @@
 
 alias x='startx'
 
-alias ls='ls --color=auto'
-alias grep='grep --color=auto'
+# Colors
+RED='\[\033[38;2;255;0;0m\]'
+MAGENTA='\[\033[38;2;255;0;255m\]'
+PURPLE='\[\033[38;2;102;0;255m\]'
+WHITE='\[\033[38;2;255;255;255m\]'
 
-# Set "user@host" in red, ':' in magenta, current dir in purple and '$' in magenta "user@host:curr_dir$ "
-PS1='\[\033[38;2;255;0;0m\]\u@\h\[\033[38;2;255;0;255m\]:\[\033[38;2;102;0;255m\]$(basename "\w")\[\033[38;2;255;0;255m\]\$\[\033[38;2;255;255;255m\] '
+# Prompt
+PS1="${RED}\u@\h${MAGENTA}:${PURPLE}\W${MAGENTA}\$${WHITE} "
 
 # Update st title for absolute path
 update_st_title() {
@@ -18,7 +21,6 @@ PROMPT_COMMAND=update_st_title
 eval "$(zoxide init bash)"
 
 cat $HOME/.notes
-
 
 source $HOME/.bash_aliases
 
