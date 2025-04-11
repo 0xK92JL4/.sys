@@ -117,6 +117,10 @@ alias kd='killall Discord'
 alias ks='setxkbmap -option'
 alias sk='setxkbmap -option caps:escape'
 alias hh='df -h $HOME && echo -e "\nSome_heavy_files:" && du -ht 100M $HOME | sort | uniq'
+alias gst='git status'
+alias gcl='git clone'
+alias gp='git push'
+alias gl='git pull'
 
 # TMP
 alias bp='bash --posix'
@@ -289,10 +293,6 @@ alias cpall='cpall_'
 alias ca='vim ~/.bash_aliases'
 alias up='. ~/.bash_aliases'
 alias clip='xclip -selection clipboard'
-alias gst='git status'
-alias gcl='git clone'
-alias gp='git push'
-alias gl='git pull'
 #--------------------------------#
 
 fi # CHAD-OS
