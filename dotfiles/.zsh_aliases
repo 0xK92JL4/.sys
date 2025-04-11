@@ -132,7 +132,7 @@ alias bp='bash --posix'
 #           UBUNTU ALIASES           #
 # ===================================#
 
-if [ -n "$IS_UBUNTU" ]; then
+if [ -n "$UBUNTU" ]; then
 
 echo UBUNTU
 
