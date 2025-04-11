@@ -134,8 +134,6 @@ alias bp='bash --posix'
 
 if [ -n "$UBUNTU" ]; then
 
-echo UBUNTU
-
 ## to auto create the dirs for new project
 #-----------------------------------------------#
 ltu_() {
