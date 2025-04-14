@@ -109,8 +109,8 @@ alias rr='rr_'
 
 ## basic aliases.
 #----------------------------------------------------------------------------------------#
-alias cca='gcc *.c -Wall -Wextra -Werror && ./a.out'
-alias ccf='gcc *.c -Wall -Wextra -Werror'
+alias cca='cc *.c -Wall -Wextra -Werror && ./a.out'
+alias ccf='cc *.c -Wall -Wextra -Werror'
 alias ccfl='ccf -pedantic -fno-omit-frame-pointer -fsanitize=address -fsanitize=undefined'
 alias cl='ccf -g && lldb a.out'
 alias kd='killall Discord'
