@@ -1,7 +1,7 @@
 #SYS#SYS#SYS#SYS#SYS#SYS#SYS#SYS#SYS#SYS#SYS#SYS#SYS#SYS#
 export ZSH="$HOME/.oh-my-zsh"
 
-ZSH_THEME="risto"
+ZSH_THEME="risto" # set by `omz`
 
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 
@@ -17,6 +17,7 @@ export EDITOR=vim
 export MAIL="ugwentzi@student.42.fr"
 
 alias firefox='/usr/lib/firefox/firefox'
+alias zen='.tarball-installations/zen/zen'
 
 eval "$(zoxide init zsh)"
 /usr/bin/setxkbmap -option caps:escape

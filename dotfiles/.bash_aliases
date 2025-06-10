@@ -64,7 +64,7 @@ alias gcp='gcp_'
 #-----------------------------------------------------------------#
 gall_() {
     local commit=${1:-"some edits 🗿"}
-	git pull && git add * && git commit -a -m "$commit" && git push
+	git pull && git add . && git commit -a -m "$commit" && git push
 }
 alias gall='gall_'
 #-----------------------------------------------------------------#
@@ -151,14 +151,14 @@ alias ltu='ltu_'
 
 ## cat with colors for supported files or default cat
 #---------------------------------------------------------#
-cat_() {
+bat_() {
   if pygmentize -O style=native "$1" > /dev/null 2>&1; then
     pygmentize -O style=native "$@"
   else
     command cat "$@"
   fi
 }
-alias cat='cat_'
+alias bat='bat_'
 #---------------------------------------------------------#
 
 ## rebuild the 42LTU folder to repair git conflict
@@ -236,8 +236,8 @@ _- -   \033[33m| | \033[32m_- _
 
 ## basic aliases.
 #--------------------------------------------#
-alias ca='vim ~/.bash_aliases'
-alias up='source ~/.bash_aliases'
+alias ca='vim ~/.zsh_aliases'
+alias up='source ~/.zsh_aliases'
 alias getmain='cp ~/42/correction/current_main/* ./main.c'
 alias corr='terminator --geometry=1920x2160+0+0 -e "bash -c \"mkdir -p /tmp/correction && cd /tmp/correction && clear && /usr/lib/firefox/firefox -private-window; exec zsh\""'
 alias endcorr='rm -rf /tmp/correction && exit'
@@ -257,6 +257,20 @@ if [ -n "$CHAD_OS" ]; then
 pdf_() { mupdf -r 89 "$@" & }
 alias pdf='pdf_'
 #---------------------------#
+
+## copies the latest makefile.
+#-----------------------------------------#
+getmake_h() {
+    local src="$HOME/42/makefile"
+    local dst="."
+
+    git -C "$src" pull
+    rm -rf "$dst/.makefile.conf"
+    cp -r "$src"/. "$dst"
+    rm -rf "$dst/.git" "$dst/.gitignore" 2>/dev/null
+}
+alias getmake="getmake_h"
+#-----------------------------------------#
 
 ## copies the latest libft.
 #-----------------------------------------#
