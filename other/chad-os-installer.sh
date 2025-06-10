@@ -150,11 +150,9 @@ pactl set-sink-mute 0 0
 cd /home/$NUSER
 git clone https://github.com/0xK92JL4/.sys.git
 
-######### not tested yet #########
 # Git Programs installing
 cd /opt
 git clone https://github.com/trapd00r/vidir.git
-######### not tested yet #########
 EOF
 
 # install custom system files
@@ -167,9 +165,7 @@ mkdir -p /home/$NUSER/.config
 ln -sf $SYS_DIR/config/* /home/$NUSER/.config/
 touch /home/$NUSER/.notes
 
-######### not tested yet #########
 ln -f /opt/vidir/bin/vidir /usr/local/bin/
-######### not tested yet #########
 
 # define ENV variable
 echo NUSER=\"$NUSER\" >> /etc/environment
