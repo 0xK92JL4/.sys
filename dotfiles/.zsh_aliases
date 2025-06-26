@@ -64,7 +64,7 @@ alias gcp='gcp_'
 #-----------------------------------------------------------------#
 gall_() {
     local commit=${1:-"some edits 🗿"}
-	git pull && git add * && git commit -a -m "$commit" && git push
+	git pull && git add . && git commit -a -m "$commit" && git push
 }
 alias gall='gall_'
 #-----------------------------------------------------------------#
