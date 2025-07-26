@@ -11,8 +11,8 @@ NUSER="ugo"
 EDITOR="vim"
 
 # Temp passwords
-ROOT_PASSWORD="root"
-NUSER_PASSWORD="$NUSER"
+read -rsp "Enter root password: " ROOT_PASSWORD ; echo
+read -rsp "Enter user password: " NUSER_PASSWORD ; echo
 
 # Chad-OS
 VERSION="v4.3"
