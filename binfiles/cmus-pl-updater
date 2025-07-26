@@ -2,7 +2,7 @@
 
 /usr/local/bin/rearrange-music
 
-MUSIC_DIR="/home/$NUSER/Music"
+MUSIC_DIR="/media/Music"
 CMUS_PLAYLISTS_DIR="/home/$NUSER/.config/cmus/playlists"
 
 PLAYLISTS=("A" "B" "C" "S" "SS")
