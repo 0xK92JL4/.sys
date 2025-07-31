@@ -104,12 +104,14 @@ pacman-key --populate archlinux
 # Programs installing
 pacman -Syu --noconfirm \
   alsa-utils \
+  cmake \
   cmus \
   discord \
   dunst \
   firefox \
   fontconfig \
   freetype2 \
+  glfw \
   htop \
   libreoffice-fresh \
   libx11 \
