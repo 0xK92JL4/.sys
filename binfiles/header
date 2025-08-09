@@ -1,0 +1,33 @@
+#!/bin/bash
+
+FILE="$1"
+USER="ugwentzi"
+CREATED="${2:-$(date "+%Y/%m/%d %H:%M:%S")}"
+
+CREATED_TS=$(date -d "$CREATED" +%s)
+
+UPDATED_TS=$(( CREATED_TS + 123 ))
+UPDATED=$(date -d "@$UPDATED_TS" "+%Y/%m/%d %H:%M:%S")
+
+MAX_FILE_LEN=51
+FILE_LEN=${#FILE}
+if (( FILE_LEN > MAX_FILE_LEN )); then
+  PADDED_FILE="$FILE"
+else
+  PADDED_FILE="$FILE$(printf '%*s' $((MAX_FILE_LEN - FILE_LEN)) '')"
+fi
+
+cat << EOF
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   $PADDED_FILE:+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: $USER <$USER@student.42.fr>          #+#  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: $CREATED by $USER          #+#    #+#             */
+/*   Updated: $UPDATED by $USER         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+EOF
+
