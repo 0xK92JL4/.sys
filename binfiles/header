@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FILE=$(basname "$1")
+FILE=$(basename "$1")
 USER="ugwentzi"
 CREATED="${2:-$(date "+%Y/%m/%d %H:%M:%S")}"
 
