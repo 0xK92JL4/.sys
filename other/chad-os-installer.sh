@@ -130,6 +130,7 @@ pacman -Syu --noconfirm \
   pulseaudio \
   pulseaudio-alsa \
   pulseaudio-bluetooth \
+  tree \
   unclutter \
   unzip \
   vim \
