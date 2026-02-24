@@ -104,28 +104,36 @@ pacman-key --populate archlinux
 # Programs installing
 pacman -Syu --noconfirm \
   alsa-utils \
+  arch-install-scripts \
   cmake \
   cmus \
+  ctags \
   discord \
   dunst \
   firefox \
   fontconfig \
   freetype2 \
+  freetype2 \
   glfw \
   htop \
+  libmad \
   libreoffice-fresh \
+  libx11 \
   libx11 \
   libxft \
   libxinerama \
+  lldb \
   man-db \
   man-pages \
   mupdf \
   noto-fonts-cjk \
   noto-fonts-emoji \
   ntfs-3g \
+  ntfs-3g \
   numlockx \
   openssh \
   pavucontrol \
+  picard \
   playerctl \
   pulseaudio \
   pulseaudio-alsa \
@@ -133,9 +141,11 @@ pacman -Syu --noconfirm \
   tree \
   unclutter \
   unzip \
+  valgrind \
   vim \
   xbindkeys \
   xclip \
+  xf86-video-vesa \
   xorg \
   xorg-xinit \
   xwallpaper \

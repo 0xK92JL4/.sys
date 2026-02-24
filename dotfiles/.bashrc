@@ -11,6 +11,7 @@ WHITE='\[\033[38;2;255;255;255m\]'
 
 # Prompt
 PS1="${RED}\u@\h${MAGENTA}:${PURPLE}\W${MAGENTA}\$${WHITE} "
+export PS1
 
 # Update st title for absolute path
 update_st_title() {
@@ -19,8 +20,6 @@ update_st_title() {
 PROMPT_COMMAND=update_st_title
 
 eval "$(zoxide init bash)"
-
-cat $HOME/.notes
 
 source $HOME/.bash_aliases
 

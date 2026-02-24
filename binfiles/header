@@ -1,34 +1,26 @@
-#!/bin/bash
+#!/bin/sh
 
-FILE=$(basename "$1")
-USER="ugwentzi"
-CREATED="${2:-$(date "+%Y/%m/%d %H:%M:%S")}"
+FILENAME="$(basename "$1")"
+AUTHOR="ugwentzi"
+EMAIL="ugwentzi@student.42.fr"
+NOW="$(date '+%Y/%m/%d %H:%M:%S')"
 
-CREATED_TS=$(date -d "$CREATED" +%s)
-
-UPDATED_TS=$(( CREATED_TS + 123 ))
-UPDATED=$(date -d "@$UPDATED_TS" "+%Y/%m/%d %H:%M:%S")
-
-MAX_FILE_LEN=51
-FILE_LEN=${#FILE}
-if (( FILE_LEN > MAX_FILE_LEN )); then
-  PADDED_FILE="$FILE"
-else
-  PADDED_FILE="$FILE$(printf '%*s' $((MAX_FILE_LEN - FILE_LEN)) '')"
+if [ -z "$FILENAME" ]; then
+    echo "Usage: ./make_header.sh <filename>" >&2
+    exit 1
 fi
 
-cat << EOF
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   $PADDED_FILE:+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: $USER <$USER@student.42.fr>          #+#  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: $CREATED by $USER          #+#    #+#             */
-/*   Updated: $UPDATED by $USER         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+pad() {
+    printf "%-54s" "$1"
+}
 
-EOF
-
+echo   "/*┌──────────────────────────────────────────────────────────────────────────┐*/"
+echo   "/*│                                                                          │*/"
+printf "/*│  %s%s\n" "$(pad "$FILENAME")"                         "▒▒▒▒    ▒▒▒▒      │*/"
+printf "/*│  %s%s\n" "$(pad "")"                                  "▒▒▒▒    ▒▒▒▒      │*/"
+printf "/*│  %s%s\n" "$(pad "By: $AUTHOR <$EMAIL>")"              "    ▒▒▒▒          │*/"
+printf "/*│  %s%s\n" "$(pad "")"                                  "  ▒▒▒▒▒▒▒▒        │*/"
+printf "/*│  %s%s\n" "$(pad "Created: $NOW by $AUTHOR")"          "  ▒▒▒▒▒▒▒▒        │*/"
+printf "/*│  %s%s\n" "$(pad "Updated: $NOW by $AUTHOR")"          "  ▒▒    ▒▒        │*/"
+echo   "/*│                                                                          │*/"
+echo   "/*└──────────────────────────────────────────────────────────────────────────┘*/"

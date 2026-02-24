@@ -1,6 +1,6 @@
 #!/bin/bash
 
-offset="-2 hours"
+offset="-0 hours"
 
 xsetroot -name "$(date -d "$offset" +"%H:%M")"
 
