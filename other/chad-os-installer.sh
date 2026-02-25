@@ -10,7 +10,7 @@ HOST_NAME="chad"
 NUSER="ugo"
 EDITOR="vim"
 
-# Temp passwords
+# Passwords
 read -rsp "Enter root password: " ROOT_PASSWORD ; echo
 read -rsp "Enter user password: " NUSER_PASSWORD ; echo
 
