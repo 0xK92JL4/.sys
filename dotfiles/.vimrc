@@ -1,12 +1,17 @@
 autocmd VimEnter * normal! '"
 au BufRead,BufNewFile *.tpp set filetype=cpp
 syntax on
-colorscheme koehler
 filetype indent on
+colorscheme koehler
 set tabstop=4
 set shiftwidth=4
 set is hls
-command Stdheader :0r !header %
+
+set relativenumber
+set termguicolors
+highlight LineNr guifg=#008000
+
+command Header :0r !header %
 
 function! UpdateHeader()
     if getline(1) !~ '^/\*┌'
