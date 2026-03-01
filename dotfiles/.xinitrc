@@ -6,7 +6,7 @@ xbindkeys &
 unclutter -idle 1 &
 setxkbmap -option caps:escape
 numlockx &
-/home/$NUSER/.sys/statusbar/time.sh &
+/home/$NUSER/.sys/statusbar/status_bar.sh &
 
 # Launch apps
 discord &
