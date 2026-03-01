@@ -19,7 +19,7 @@ get_server_time() {
 if server_time=$(get_server_time); then
     echo "$server_time"
 else
-    echo "NoTime"
+    echo "XX:XX"
 fi
 
 ##!/bin/bash
