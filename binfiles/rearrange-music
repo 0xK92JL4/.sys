@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MUSIC_DIR="/home/$NUSER/Music"
+MUSIC_DIR="/media/$NUSER/Music"
 PLAYLISTS=("A" "B" "C" "S" "SS")
 
 for playlist in "${PLAYLISTS[@]}"; do

@@ -1,15 +1,23 @@
 #!/bin/bash
 
-time_str=$(~/.sys/statusbar/time.sh)
-updates=$(~/.sys/statusbar/new_package_count.sh)
-xsetroot -name "📥 $updates | 🕒 $time_str"
+PID_FILE="/tmp/status_bar.pid"
+echo $$ > "$PID_FILE"
 
-seconds_until_next_minute=$((60 - $(date +%S)))
-sleep $seconds_until_next_minute
+update_status() {
+    time_str=$($HOME/.sys/statusbar/time.sh)
+    updates=$($HOME/.sys/statusbar/new_package_count.sh)
+    song=$($HOME/.sys/statusbar/current_song.sh)
+
+    xsetroot -name "$song $updates $time_str"
+}
+
+trap 'update_status' SIGUSR1
+
+update_status
 
 while true; do
-    time_str=$(~/.sys/statusbar/time.sh)
-    updates=$(~/.sys/statusbar/new_package_count.sh)
-    xsetroot -name "📥 $updates | 🕒 $time_str"
-    sleep 60
+    seconds_until_next_minute=$((60 - $(date +%S)))
+    sleep $seconds_until_next_minute &
+    wait $!
+    update_status
 done

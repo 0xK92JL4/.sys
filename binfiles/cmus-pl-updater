@@ -1,13 +1,13 @@
 #!/bin/bash
 
-/usr/local/bin/rearrange-music
+/home/$NUSER/.local/bin/rearrange-music
 
 MUSIC_DIR="/media/Music"
 CMUS_PLAYLISTS_DIR="/home/$NUSER/.config/cmus/playlists"
 
 PLAYLISTS=("A" "B" "C" "S" "SS")
 
-rm $CMUS_PLAYLISTS_DIR/default
+rm -f $CMUS_PLAYLISTS_DIR/default
 
 for PL_NAME in "${PLAYLISTS[@]}"
 do
