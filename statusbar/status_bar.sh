@@ -22,7 +22,7 @@ update_status() {
             reload_status_bar
         fi
 
-        sleep 1
+        sleep 5
     done
 ) &
 
