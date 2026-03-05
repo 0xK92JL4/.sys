@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# PID file location (same as your status bar)
+PID_FILE="/tmp/status_bar.pid"
+
+# Check if PID file exists and process is running
+if [ -f "$PID_FILE" ] && kill -0 $(cat "$PID_FILE") 2>/dev/null; then
+    kill -SIGUSR1 $(cat "$PID_FILE")
+else
+    echo "Status bar not running."
+    exit 1
+fi
