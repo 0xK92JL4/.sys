@@ -7,13 +7,11 @@
 "amixer set Master 1%-"
   XF86AudioLowerVolume
 
-"playerctl previous"
+"playerctl previous ; reload_status_bar"
     XF86AudioPrev
-    reload_status_bar
 
-"playerctl next"
+"playerctl next ; reload_status_bar"
     XF86AudioNext
-    reload_status_bar
 
 "playerctl play-pause"
     XF86AudioPlay
