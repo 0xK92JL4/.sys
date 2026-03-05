@@ -122,9 +122,8 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_0,                      9)
 	{ MODKEY|ControlMask|ShiftMask, XK_q,      quit,           {0} },
 	{ MODKEY|ShiftMask,             XK_l,      spawn,          SHCMD("slock") },
-	{ MODKEY|ControlMask,           XK_s,      spawn,          SHCMD("pactl set-default-sink alsa_output.pci-0000_0c_00.4.analog-stereo") },
-	{ MODKEY|ShiftMask,             XK_n,      spawn,          SHCMD("playerctl next") },
-	{ MODKEY|ShiftMask,             XK_p,      spawn,          SHCMD("playerctl previous") },
+	{ MODKEY|ShiftMask,             XK_n,      spawn,          SHCMD("playerctl next ; reload_status_bar") },
+	{ MODKEY|ShiftMask,             XK_p,      spawn,          SHCMD("playerctl previous ; reload_status_bar") },
 
 
 
