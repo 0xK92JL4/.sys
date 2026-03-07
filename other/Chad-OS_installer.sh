@@ -156,7 +156,7 @@ pacman -Syu --noconfirm \
     libmad libreoffice-fresh libx11 libxft libxinerama \
     lldb man-db man-pages mupdf noto-fonts-cjk noto-fonts-emoji \
     ntfs-3g numlockx openssh pacman-contrib pavucontrol picard
-    playerctl pulseaudio pulseaudio-alsa pulseaudio-bluetooth \
+    playerctl pulseaudio pulseaudio-alsa pulseaudio-equalizer \
     tree unclutter unzip valgrind vim xbindkeys xclip \
     xf86-video-vesa xorg xorg-xinit xwallpaper zip zoxide
 
