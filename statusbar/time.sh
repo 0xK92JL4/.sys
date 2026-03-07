@@ -17,9 +17,9 @@ get_server_time() {
 }
 
 if server_time=$(get_server_time); then
-    echo "🌐 $server_time"
+    echo "🕒 $server_time"
 else
-    echo "🌐 XX:XX"
+    echo "🕒 XX:XX"
 fi
 
 ##!/bin/bash

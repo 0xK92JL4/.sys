@@ -3,7 +3,7 @@
 updates=$(checkupdates 2>/dev/null | wc -l)
 
 if [ "$updates" -gt 0 ]; then
-    echo "📦 $updates |"
+    echo "📥 $updates |"
 else
     echo ""
 fi

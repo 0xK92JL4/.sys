@@ -6,7 +6,10 @@ static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const int focusonwheel       = 0;
-static const char *fonts[]          = { "HackNerdFontPropo-Regular:size=16" };
+static const char *fonts[] = {
+    "Hack Nerd Font Propo:size=16",
+    "Noto Color Emoji:size=16"
+};
 static const char dmenufont[]       = "HackNerdFontPropo-Regular:size=16";
 static const char col_black[]       = "#000000";
 static const char col_white[]       = "#ffffff";
