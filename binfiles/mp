@@ -1,3 +1,9 @@
 #!/bin/bash
-cmus-pl-updater
-st cmus
+
+if music-integrity-check; then
+    cmus-pl-updater
+    st cmus
+else
+    notify-send -u critical "Music library problem" "Integrity check failed. cmus not started."
+    echo "Music integrity check failed. Aborting."
+fi

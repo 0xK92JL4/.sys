@@ -38,6 +38,8 @@ rm "$tmp"
 
 if [[ $status -eq 0 ]]; then
     echo "✓ Music integrity check PASSED"
+	exit 0
 else
     echo "✗ Music integrity check FAILED"
+	exit 1
 fi
