@@ -1,17 +1,14 @@
 #!/usr/bin/env bash
 
-output=$(cmus-remote -Q 2>/dev/null) || {
-    echo "cmus is not running."
-    exit 1
-}
+output=$(cmus-remote -Q 2>/dev/null) || exit 1
 
 file=$(printf '%s\n' "$output" | sed -n 's/^file //p')
-
-if [ -z "$file" ]; then
-    echo "No file currently loaded."
-    exit 1
-fi
+[ -z "$file" ] && exit 1
 
 dir=$(dirname -- "$file")
 
-st -e vidir "$dir" &
+cmus-remote -C "pause"
+
+st -e vidir "$dir"
+
+cmus-remote -C "play"

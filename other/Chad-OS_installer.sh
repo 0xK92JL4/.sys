@@ -194,6 +194,7 @@ ENVIRONMENT
 mkdir -p /home/$NUSER/Downloads
 curl -L -o /home/$NUSER/Downloads/Hack.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.0/Hack.zip
 unzip /home/$NUSER/Downloads/Hack.zip -d /usr/share/fonts/
+rm -rf /home/$NUSER/Downloads/Hack.zip
 
 # Suckless build
 cd "$SYS_DIR/suckless/dwm" && make clean install
