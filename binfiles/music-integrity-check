@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+MUSIC="/media/Music"
+INDEX="/media/Music/.index"
+
+tmp=$(mktemp)
+
+find "$MUSIC" -type f -name "*.mp3" \
+| sed "s|$MUSIC/||" \
+| sort > "$tmp"
+
+expected=$(cat "$INDEX/count.txt")
+current=$(wc -l < "$tmp")
+
+status=0
+
+echo "Checking song count..."
+
+echo "expected: $expected"
+echo "current : $current"
+
+if [[ "$expected" != "$current" ]]; then
+    echo "ERROR: song count mismatch"
+    status=1
+fi
+
+echo
+echo "Checking filenames..."
+
+if ! diff "$INDEX/files.txt" "$tmp"; then
+    echo "ERROR: filename list differs"
+    status=1
+fi
+
+rm "$tmp"
+
+if [[ $status -eq 0 ]]; then
+    echo "✓ Music integrity check PASSED"
+else
+    echo "✗ Music integrity check FAILED"
+fi
