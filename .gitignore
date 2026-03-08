@@ -1,3 +1,6 @@
-config/cmus/cache
-config/cmus/playlists/*
-config/cmus/*
+config/cmus/**
+config/pulse/cookie
+config/pulse/*.tdb
+config/pulse/*-default-*
+!config/pulse/equalizer-presets.tdb
+!config/pulse/equalizer-state.tdb
