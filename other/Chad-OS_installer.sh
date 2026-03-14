@@ -174,7 +174,9 @@ git clone https://github.com/trapd00r/vidir.git
 ln -sf $SYS_DIR/dotfiles/.* $HOME_DIR
 ln -sf $SYS_DIR/dotfiles/.* /root
 ln -f $SYS_DIR/binfiles/* $HOME_DIR/.local/bin
-ln -sf $SYS_DIR/config/* $HOME_DIR/.config
+ln -sf $SYS_DIR/config/dunst $HOME_DIR/.config
+ln -sf $SYS_DIR/config/pulse/equalizer-presets.tdb $HOME_DIR/.config/pulse/equalizer-presets.tdb
+ln -sf $SYS_DIR/config/pulse/equalizer-state.tdb $HOME_DIR/.config/pulse/equalizer-state.tdb
 ln -f $HOME_DIR/.local/app/vidir/bin/vidir $HOME_DIR/.local/bin
 
 touch $HOME_DIR/.notes
