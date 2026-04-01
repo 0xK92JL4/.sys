@@ -119,10 +119,12 @@ alias sk='setxkbmap -option caps:escape'
 alias hh='df -h $HOME && echo -e "\nSome_heavy_files:" && du -ht 100M $HOME | sort | uniq'
 alias gst='git status'
 alias gcl='git clone'
+alias gcm='git commit -m '
 alias grs='git restore'
 alias gp='git push'
 alias gl='git pull'
 alias ls='ls --color=auto'
+alias fs='stat -c%s'
 alias grep='grep --color=auto'
 
 # TMP

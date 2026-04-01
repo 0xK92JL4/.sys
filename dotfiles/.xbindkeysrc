@@ -16,3 +16,8 @@
 "playerctl play-pause"
     XF86AudioPlay
 
+"sn"
+  End
+
+"rn"
+  Home

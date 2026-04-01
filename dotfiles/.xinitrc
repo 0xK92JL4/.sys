@@ -7,6 +7,7 @@ unclutter -idle 1 &
 setxkbmap -option caps:escape
 numlockx &
 /home/$NUSER/.sys/statusbar/status_bar.sh &
+(sleep 5 && pactl load-module module-equalizer-sink) &
 
 # Launch apps
 discord &
