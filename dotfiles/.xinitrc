@@ -1,3 +1,7 @@
+# Some shi
+systemctl --user import-environment DISPLAY XAUTHORITY XDG_CURRENT_DESKTOP
+dbus-update-activation-environment --systemd DISPLAY XAUTHORITY XDG_CURRENT_DESKTOP
+
 # Set environment
 xrandr --output DP-1 --mode 1920x1080 --rate 239.76
 xwallpaper --center /home/$NUSER/.sys/wallpaper/*

@@ -11,6 +11,7 @@ set relativenumber
 set termguicolors
 highlight LineNr guifg=#008000
 
+command Header42 :0r !header42 %
 command Header :0r !header %
 
 function! UpdateHeader()

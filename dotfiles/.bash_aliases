@@ -117,8 +117,9 @@ alias kd='killall Discord'
 alias ks='setxkbmap -option'
 alias sk='setxkbmap -option caps:escape'
 alias hh='df -h $HOME && echo -e "\nSome_heavy_files:" && du -ht 100M $HOME | sort | uniq'
+alias hr='df -h / && echo -e "\nSome_heavy_files:" && du --exclude=/home --exclude=/media -ht 100M / 2>/dev/null | sort | uniq'
 alias gst='git status'
-alias gcl='git clone'
+#alias gcl='git clone'
 alias gcm='git commit -m '
 alias grs='git restore'
 alias gs='git switch'
@@ -126,6 +127,7 @@ alias gd='git diff'
 alias gp='git push'
 alias gl='git pull'
 alias ls='ls --color=auto'
+alias tree='tree -C'
 alias fs='stat -c%s'
 alias grep='grep --color=auto'
 
@@ -290,6 +292,33 @@ getlib_h() {
 alias getlib="getlib_h"
 #-----------------------------------------#
 
+
+#-----------------------------------------#
+gcl_() {
+    local url="$1"
+
+    # remove protocol prefix if present
+    url="${url#git@}"
+    url="${url#https://}"
+    url="${url%.git}"
+
+    # split host:path
+    local host="${url%%:*}"
+    local path="${url#*:}"
+
+    # extract owner (first segment of path)
+    local owner="${path%%/*}"
+
+    # build ssh alias
+    local newhost="github-${owner}"
+
+    echo "Cloning via: $newhost:$path"
+
+    git clone "${newhost}:${path}"
+}
+alias gcl='gcl_'
+#-----------------------------------------#
+
 ## exec tree and copies every $1 or .c files
 ## prefixed by their names.
 #--------------------------------#
@@ -306,6 +335,46 @@ cpall_() {
 }
 alias cpall='cpall_'
 #--------------------------------#
+
+## cp all files in .
+#------------------------------------------------------------------#
+cpallhere() {
+    local excluded_dirs=(
+        ".git"
+        "node_modules"
+        "build"
+        "dist"
+    )
+
+    local file
+    local rel
+    local excluded
+
+    while IFS= read -r -d '' file; do
+        rel="${file#./}"
+
+        for excluded in "${excluded_dirs[@]}"; do
+            case "$rel" in
+                "$excluded"/*)
+                    continue 2
+                    ;;
+            esac
+        done
+
+        printf '[%s]\n' "$rel"
+
+        if file --brief --mime-type "$file" | grep -q '^text/'; then
+            printf '"'
+            cat "$file"
+            printf '"\n'
+        else
+            printf '[binary]\n'
+        fi
+
+        printf '\n'
+    done < <(find . -type f -print0) | xclip -selection clipboard
+}
+#------------------------------------------------------------------#
 
 ## basic aliases.
 #-------------------------------------#
