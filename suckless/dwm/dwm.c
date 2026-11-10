@@ -256,6 +256,7 @@ static void zoom(const Arg *arg);
 static int load_xresources(void);
 static void resource_load(XrmDatabase db, char *name, enum resource_type rtype, void *dst);
 static void reload_xresources(void);
+static void setborderwidth(Client *c, unsigned int bw);
 
 /* variables */
 static const char broken[] = "broken";
@@ -423,11 +424,14 @@ arrangemon(Monitor *m)
 	strncpy(m->ltsymbol, m->lt[m->sellt]->symbol, sizeof m->ltsymbol);
 	if (m->lt[m->sellt]->arrange)
 		m->lt[m->sellt]->arrange(m);
-	else
-		/* <>< case; rather than providing an arrange function and upsetting other logic that tests for its presence, simply add borders here */
-		for (c = selmon->clients; c; c = c->next)
-			if (ISVISIBLE(c) && c->bw == 0)
-				resize(c, c->x, c->y, c->w - 2*borderpx, c->h - 2*borderpx, borderpx, 0);
+    else
+    {
+        for (c = m->clients; c; c = c->next)
+        {
+            if (ISVISIBLE(c) && !c->isfullscreen)
+                setborderwidth(c, fborderpx);
+        }
+    }
 }
 
 void
@@ -1091,6 +1095,9 @@ manage(Window w, XWindowAttributes *wa)
 	grabbuttons(c, 0);
 	if (!c->isfloating)
 		c->isfloating = c->oldstate = trans != None || c->isfixed;
+	/* Apply the appropriate border width after determining floating state. */
+	if (!c->isfullscreen)
+		setborderwidth(c, c->isfloating ? fborderpx : borderpx);
 	if (c->isfloating)
 		XRaiseWindow(dpy, c->win);
 	attach(c);
@@ -1416,7 +1423,7 @@ reload_xresources(void)
 			/* Update floating window border widths */
 			if (!c->isfullscreen
 			&& (c->isfloating || !m->lt[m->sellt]->arrange))
-				resize(c, c->x, c->y, c->w, c->h, borderpx, 0);
+				setborderwidth(c, fborderpx);
 
 			/* Update every client's border color */
 			XSetWindowBorder(dpy, c->win,
@@ -1449,6 +1456,26 @@ recttomon(int x, int y, int w, int h)
 			r = m;
 		}
 	return r;
+}
+
+static void
+setborderwidth(Client *c, unsigned int bw)
+{
+    int delta;
+
+    if (!c || c->bw == bw)
+        return;
+
+    /*
+     * Preserve the outer window dimensions when changing
+     * the border width.
+     */
+    delta = 2 * ((int)bw - (int)c->bw);
+
+    resize(c, c->x, c->y,
+        MAX(1, c->w - delta),
+        MAX(1, c->h - delta),
+        bw, 0);
 }
 
 void
@@ -1675,7 +1702,7 @@ setfullscreen(Client *c, int fullscreen)
 		c->y = c->oldy;
 		c->w = c->oldw;
 		c->h = c->oldh;
-		c->bw = c->oldbw;
+        c->bw = c->isfloating ? fborderpx : borderpx;
 		resizeclient(c, c->x, c->y, c->w, c->h, c->bw);
 		arrange(c->mon);
 	}
@@ -1935,11 +1962,7 @@ togglefloating(const Arg *arg)
 	if (selmon->sel->isfullscreen) /* no support for fullscreen windows */
 		return;
 	selmon->sel->isfloating = !selmon->sel->isfloating || selmon->sel->isfixed;
-	if (selmon->sel->isfloating)
-		resize(selmon->sel, selmon->sel->x, selmon->sel->y,
-			selmon->sel->w - 2 * (borderpx - selmon->sel->bw),
-			selmon->sel->h - 2 * (borderpx - selmon->sel->bw),
-			borderpx, 0);
+	setborderwidth(selmon->sel, selmon->sel->isfloating ? fborderpx : borderpx);
 	arrange(selmon);
 }
 
