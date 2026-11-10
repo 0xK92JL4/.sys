@@ -17,4 +17,5 @@ numlockx &
 discord &
 dunst &
 
+xrdb -merge "$HOME/.Xresources"
 exec dwm

@@ -3,9 +3,17 @@ au BufRead,BufNewFile *.tpp set filetype=cpp
 syntax on
 filetype indent on
 colorscheme koehler
+
+set is hls
+set expandtab
 set tabstop=4
 set shiftwidth=4
-set is hls
+set softtabstop=4
+
+augroup FileTypeIndentation
+autocmd!
+autocmd FileType ruby setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+augroup END
 
 set relativenumber
 set termguicolors
