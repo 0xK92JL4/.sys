@@ -1,45 +1,71 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
-static const unsigned int snap      = 32;       /* snap pixel */
-static const int showbar            = 1;        /* 0 means no bar */
-static const int topbar             = 1;        /* 0 means bottom bar */
+static unsigned int borderpx        = 1;        /* border pixel of windows */
+static unsigned int snap            = 32;       /* snap pixel */
+static int showbar                  = 1;        /* 0 means no bar */
+static int topbar                   = 1;        /* 0 means bottom bar */
 static const int focusonwheel       = 0;
 static const char *fonts[] = {
     "Hack Nerd Font Propo:size=16",
     "Noto Color Emoji:size=16"
 };
 static const char dmenufont[]       = "HackNerdFontPropo-Regular:size=16";
-static const char col_black[]       = "#000000";
-static const char col_white[]       = "#ffffff";
-static const char col_gray1[]       = "#222222";
-static const char col_gray2[]       = "#444444";
-static const char col_gray5[]       = "#999999";
-static const char col_gray3[]       = "#bbbbbb";
-static const char col_gray4[]       = "#eeeeee";
-static const char col_cyan[]        = "#005577";
-static const char col_red1[]        = "#1a0000";
-static const char col_red2[]        = "#880000";
-static const char col_red3[]        = "#cc0000";
-static const char col_red4[]        = "#ff0000";
-static const char *colors[][3]      = {
-	/*                   fg         bg         border   */
-	[SchemeNorm]     = { "#000000", "#000000", col_gray1  },
-	[SchemeSel]      = { "#000000", "#000000", col_red4   },
-	[SchemeStatus]   = { col_gray3, col_black, "#000000"  },
-	[SchemeTagsSel]  = { col_red2,  col_black, "#000000"  },
-	[SchemeTagsNorm] = { col_red2,  col_black, "#000000"  },
-	[SchemeInfoSel]  = { col_red3,  col_black, "#000000"  },
-	[SchemeInfoNorm] = { col_red3,  col_black, "#000000"  },
+
+/* dmenu colors */ // patch the hell of dmenu instead of putting colors in dwm !!!!!!!!!!!!!!!
+static char col_white[] = "#ffffff";
+static char col_gray3[] = "#bbbbbb";
+static char col_red1[] = "#1a0000";
+static char col_red2[] = "#880000";
+
+/* colors */
+static char normfgcolor[]           = "#000000";
+static char normbgcolor[]           = "#000000";
+static char normbordercolor[]       = "#222222";
+static char selfgcolor[]            = "#000000";
+static char selbgcolor[]            = "#000000";
+static char selbordercolor[]        = "#ff0000";
+static char statusfgcolor[]         = "#bbbbbb";
+static char statusbgcolor[]         = "#000000";
+static char statusbordercolor[]     = "#000000";
+static char tagsel_fgcolor[]        = "#880000";
+static char tagsel_bgcolor[]        = "#000000";
+static char tagsel_bordercolor[]    = "#000000";
+static char tagsnorm_fgcolor[]      = "#880000";
+static char tagsnorm_bgcolor[]      = "#000000";
+static char tagsnorm_bordercolor[]  = "#000000";
+static char infosel_fgcolor[]       = "#cc0000";
+static char infosel_bgcolor[]       = "#000000";
+static char infosel_bordercolor[]   = "#000000";
+static char infonorm_fgcolor[]      = "#cc0000";
+static char infonorm_bgcolor[]      = "#000000";
+static char infonorm_bordercolor[]  = "#000000";
+
+static char *colors[][3] = {
+    [SchemeNorm]     = { normfgcolor, normbgcolor, normbordercolor },
+    [SchemeSel]      = { selfgcolor, selbgcolor, selbordercolor },
+    [SchemeStatus]   = { statusfgcolor, statusbgcolor, statusbordercolor },
+    [SchemeTagsSel]  = { tagsel_fgcolor, tagsel_bgcolor, tagsel_bordercolor },
+    [SchemeTagsNorm] = { tagsnorm_fgcolor, tagsnorm_bgcolor, tagsnorm_bordercolor },
+    [SchemeInfoSel]  = { infosel_fgcolor, infosel_bgcolor, infosel_bordercolor },
+    [SchemeInfoNorm] = { infonorm_fgcolor, infonorm_bgcolor, infonorm_bordercolor },
 };
 
-static const char *tagsel[][2] = {
-  /* fg         bg      */
-  { col_gray2, col_black }, /* norm */
-  { col_white, col_red2  }, /* sel */
-  { col_gray3, col_black }, /* occ but not sel */
-  { col_red3,  col_black }, /* has pinned tag */
+static char tag_norm_fgcolor[]      = "#444444";
+static char tag_norm_bgcolor[]      = "#000000";
+static char tag_sel_fgcolor[]       = "#ffffff";
+static char tag_sel_bgcolor[]       = "#880000";
+static char tag_occupied_fgcolor[]  = "#bbbbbb";
+static char tag_occupied_bgcolor[]  = "#000000";
+static char tag_pinned_fgcolor[]    = "#cc0000";
+static char tag_pinned_bgcolor[]    = "#000000";
+
+static char *tagsel[][2] = {
+    /* fg                   bg */
+    { tag_norm_fgcolor,     tag_norm_bgcolor },
+    { tag_sel_fgcolor,      tag_sel_bgcolor },
+    { tag_occupied_fgcolor, tag_occupied_bgcolor },
+    { tag_pinned_fgcolor,   tag_pinned_bgcolor },
 };
 
 /* tagging */
@@ -58,9 +84,9 @@ static const Rule rules[] = {
 };
 
 /* layout(s) */
-static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
-static const int nmaster     = 1;    /* number of clients in master area */
-static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
+static float mfact              = 0.55; /* factor of master area size [0.05..0.95] */
+static int nmaster              = 1;    /* number of clients in master area */
+static int resizehints          = 1;    /* 1 means respect size hints in tiled resizals */
 static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
 
 static const Layout layouts[] = {
@@ -85,6 +111,62 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_red1, "-nf", col_gray3, "-sb", col_red2, "-sf", col_white, NULL };
 static const char *termcmd[]  = { "st", NULL };
+
+/* Xresources preferences */
+ResourcePref resources[] = {
+    /* Appearance */
+    { "borderpx", UINT, &borderpx },
+    { "snap", UINT, &snap },
+    { "showbar", INTEGER, &showbar },
+    { "topbar", INTEGER, &topbar },
+
+    /* Layout */
+    { "mfact", FLOAT, &mfact },
+    { "nmaster", INTEGER, &nmaster },
+    { "resizehints", INTEGER, &resizehints },
+
+    /* Colors */
+    { "normfgcolor", STRING, &normfgcolor },
+    { "normbgcolor", STRING, &normbgcolor },
+    { "normbordercolor", STRING, &normbordercolor },
+
+    { "selfgcolor", STRING, &selfgcolor },
+    { "selbgcolor", STRING, &selbgcolor },
+    { "selbordercolor", STRING, &selbordercolor },
+
+    { "statusfgcolor", STRING, &statusfgcolor },
+    { "statusbgcolor", STRING, &statusbgcolor },
+    { "statusbordercolor", STRING, &statusbordercolor },
+
+    { "tagsel_fgcolor", STRING, &tagsel_fgcolor },
+    { "tagsel_bgcolor", STRING, &tagsel_bgcolor },
+    { "tagsel_bordercolor", STRING, &tagsel_bordercolor },
+
+    { "tagsnorm_fgcolor", STRING, &tagsnorm_fgcolor },
+    { "tagsnorm_bgcolor", STRING, &tagsnorm_bgcolor },
+    { "tagsnorm_bordercolor", STRING, &tagsnorm_bordercolor },
+
+    { "infosel_fgcolor", STRING, &infosel_fgcolor },
+    { "infosel_bgcolor", STRING, &infosel_bgcolor },
+    { "infosel_bordercolor", STRING, &infosel_bordercolor },
+
+    { "infonorm_fgcolor", STRING, &infonorm_fgcolor },
+    { "infonorm_bgcolor", STRING, &infonorm_bgcolor },
+    { "infonorm_bordercolor", STRING, &infonorm_bordercolor },
+
+    /* Tag colors */
+    { "tag_norm_fgcolor", STRING, &tag_norm_fgcolor },
+    { "tag_norm_bgcolor", STRING, &tag_norm_bgcolor },
+
+    { "tag_sel_fgcolor", STRING, &tag_sel_fgcolor },
+    { "tag_sel_bgcolor", STRING, &tag_sel_bgcolor },
+
+    { "tag_occupied_fgcolor", STRING, &tag_occupied_fgcolor },
+    { "tag_occupied_bgcolor", STRING, &tag_occupied_bgcolor },
+
+    { "tag_pinned_fgcolor", STRING, &tag_pinned_fgcolor },
+    { "tag_pinned_bgcolor", STRING, &tag_pinned_bgcolor },
+};
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */

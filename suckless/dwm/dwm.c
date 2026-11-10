@@ -20,22 +20,25 @@
  *
  * To understand everything else, start reading main().
  */
+#include <ctype.h>
 #include <errno.h>
+#include <limits.h>
 #include <locale.h>
 #include <signal.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <X11/cursorfont.h>
-#include <X11/keysym.h>
+#include <unistd.h>
 #include <X11/Xatom.h>
 #include <X11/Xlib.h>
 #include <X11/Xproto.h>
+#include <X11/Xresource.h>
 #include <X11/Xutil.h>
+#include <X11/cursorfont.h>
+#include <X11/keysym.h>
 #ifdef XINERAMA
 #include <X11/extensions/Xinerama.h>
 #endif /* XINERAMA */
@@ -141,6 +144,19 @@ typedef struct {
 	int monitor;
 } Rule;
 
+enum resource_type {
+	STRING = 0,
+	INTEGER = 1,
+	FLOAT = 2,
+	UINT = 3
+};
+
+typedef struct {
+	char *name;
+	enum resource_type type;
+	void *dst;
+} ResourcePref;
+
 /* function declarations */
 static void applyrules(Client *c);
 static int applysizehints(Client *c, int *x, int *y, int *w, int *h, int *bw, int interact);
@@ -237,6 +253,9 @@ static int xerror(Display *dpy, XErrorEvent *ee);
 static int xerrordummy(Display *dpy, XErrorEvent *ee);
 static int xerrorstart(Display *dpy, XErrorEvent *ee);
 static void zoom(const Arg *arg);
+static int load_xresources(void);
+static void resource_load(XrmDatabase db, char *name, enum resource_type rtype, void *dst);
+static void reload_xresources(void);
 
 /* variables */
 static const char broken[] = "broken";
@@ -399,7 +418,7 @@ arrange(Monitor *m)
 void
 arrangemon(Monitor *m)
 {
-    Client *c;
+	Client *c;
 
 	strncpy(m->ltsymbol, m->lt[m->sellt]->symbol, sizeof m->ltsymbol);
 	if (m->lt[m->sellt]->arrange)
@@ -497,10 +516,10 @@ cleanup(void)
 		cleanupmon(mons);
 	for (i = 0; i < CurLast; i++)
 		drw_cur_free(drw, cursor[i]);
- 	for (i = 0; i < LENGTH(colors); i++)
- 		free(scheme[i]);
+	for (i = 0; i < LENGTH(colors); i++)
+		drw_scm_free(drw, scheme[i], 3);
 	for (i = 0; i < LENGTH(tagsel); i++)
-		free(tagscheme[i]);
+		drw_scm_free(drw, tagscheme[i], 2);
 	free(scheme);
 	free(tagscheme);
 	XDestroyWindow(dpy, wmcheckwin);
@@ -1222,6 +1241,11 @@ propertynotify(XEvent *e)
 	Window trans;
 	XPropertyEvent *ev = &e->xproperty;
 
+	if (ev->window == root && ev->atom == XA_RESOURCE_MANAGER) {
+		if (ev->state == PropertyNewValue)
+			reload_xresources();
+		return;
+	}
 	if ((ev->window == root) && (ev->atom == XA_WM_NAME))
 		updatestatus();
 	else if (ev->state == PropertyDelete)
@@ -1250,6 +1274,161 @@ propertynotify(XEvent *e)
 		if (ev->atom == netatom[NetWMWindowType])
 			updatewindowtype(c);
 	}
+}
+
+
+static void
+resource_load(XrmDatabase db, char *name,
+	enum resource_type rtype, void *dst)
+{
+	char fullname[256];
+	char *type = NULL;
+	char *end;
+	XrmValue value = {0};
+	long ivalue;
+	unsigned long uvalue;
+	float fvalue;
+	size_t i;
+
+	snprintf(fullname, sizeof(fullname), "dwm.%s", name);
+
+	if (!XrmGetResource(db, fullname, fullname, &type, &value)
+	|| !value.addr || !type || strcmp(type, "String") != 0)
+		return;
+
+	switch (rtype) {
+	case STRING:
+		/* All configured color buffers are char[8]: #RRGGBB */
+		for (i = 0; i < 8 && value.addr[i]; i++)
+			;
+		if (i != 7 || value.addr[0] != '#')
+			return;
+
+		for (i = 1; i < 7; i++)
+			if (!isxdigit((unsigned char)value.addr[i]))
+				return;
+
+		memcpy(dst, value.addr, 7);
+		((char *)dst)[7] = '\0';
+		break;
+
+	case INTEGER:
+		errno = 0;
+		ivalue = strtol(value.addr, &end, 10);
+		if (errno || end == value.addr || *end
+		|| ivalue < INT_MIN || ivalue > INT_MAX)
+			return;
+
+		*(int *)dst = (int)ivalue;
+		break;
+
+	case UINT:
+		if (value.addr[0] == '-')
+			return;
+
+		errno = 0;
+		uvalue = strtoul(value.addr, &end, 10);
+		if (errno || end == value.addr || *end || uvalue > UINT_MAX)
+			return;
+
+		*(unsigned int *)dst = (unsigned int)uvalue;
+		break;
+
+	case FLOAT:
+		errno = 0;
+		fvalue = strtof(value.addr, &end);
+		if (errno || end == value.addr || *end
+		|| !(fvalue >= 0.05f && fvalue <= 0.95f))
+			return;
+
+		*(float *)dst = fvalue;
+		break;
+	}
+}
+
+static int
+load_xresources(void)
+{
+	Display *display;
+	char *resm;
+	XrmDatabase db;
+	ResourcePref *p;
+
+	if (!(display = XOpenDisplay(NULL)))
+		return 0;
+
+	resm = XResourceManagerString(display);
+	if (!resm) {
+		XCloseDisplay(display);
+		return 0;
+	}
+
+	db = XrmGetStringDatabase(resm);
+	if (!db) {
+		XCloseDisplay(display);
+		return 0;
+	}
+
+	for (p = resources; p < resources + LENGTH(resources); p++)
+		resource_load(db, p->name, p->type, p->dst);
+
+	XrmDestroyDatabase(db);
+	XCloseDisplay(display);
+
+	return 1;
+}
+
+
+static void
+reload_xresources(void)
+{
+	unsigned int i;
+	Monitor *m;
+	Client *c;
+
+	if (!load_xresources())
+		return;
+
+	/* Recreate normal dwm color schemes */
+	for (i = 0; i < LENGTH(colors); i++) {
+		drw_scm_free(drw, scheme[i], 3);
+		scheme[i] = drw_scm_create(drw, colors[i], 3);
+	}
+
+	/* Recreate tag color schemes */
+	for (i = 0; i < LENGTH(tagsel); i++) {
+		drw_scm_free(drw, tagscheme[i], 2);
+		tagscheme[i] = drw_scm_create(drw, tagsel[i], 2);
+	}
+
+	/* Apply settings copied into monitor structures */
+	for (m = mons; m; m = m->next) {
+		m->mfact = mfact;
+		m->nmaster = MAX(0, nmaster);
+		m->showbar = showbar;
+		m->topbar = topbar;
+
+		updatebarpos(m);
+		XMoveResizeWindow(dpy, m->barwin,
+			m->wx, m->by, m->ww, bh);
+
+		for (c = m->clients; c; c = c->next) {
+			/* Update floating window border widths */
+			if (!c->isfullscreen
+			&& (c->isfloating || !m->lt[m->sellt]->arrange))
+				resize(c, c->x, c->y, c->w, c->h, borderpx, 0);
+
+			/* Update every client's border color */
+			XSetWindowBorder(dpy, c->win,
+				(m == selmon && c == selmon->sel)
+				? scheme[SchemeSel][ColBorder].pixel
+				: scheme[SchemeNorm][ColBorder].pixel);
+		}
+	}
+
+	arrange(NULL);
+	focus(NULL);
+	XSync(dpy, False);
 }
 
 void
@@ -2193,6 +2372,8 @@ main(int argc, char *argv[])
 	if (!(dpy = XOpenDisplay(NULL)))
 		die("dwm: cannot open display");
 	checkotherwm();
+	XrmInitialize();
+	load_xresources();
 	setup();
 #ifdef __OpenBSD__
 	if (pledge("stdio rpath proc exec", NULL) == -1)
