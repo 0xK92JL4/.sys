@@ -13,12 +13,6 @@ static const char *fonts[] = {
 };
 static const char dmenufont[]       = "HackNerdFontPropo-Regular:size=16";
 
-/* dmenu colors */ // patch the hell of dmenu instead of putting colors in dwm !!!!!!!!!!!!!!!
-static char col_white[] = "#ffffff";
-static char col_gray3[] = "#bbbbbb";
-static char col_red1[] = "#1a0000";
-static char col_red2[] = "#880000";
-
 /* colors */
 static char normfgcolor[]           = "#000000";
 static char normbgcolor[]           = "#000000";
@@ -43,12 +37,12 @@ static char infonorm_bgcolor[]      = "#000000";
 static char infonorm_bordercolor[]  = "#000000";
 
 static char *colors[][3] = {
-    [SchemeNorm]     = { normfgcolor, normbgcolor, normbordercolor },
-    [SchemeSel]      = { selfgcolor, selbgcolor, selbordercolor },
-    [SchemeStatus]   = { statusfgcolor, statusbgcolor, statusbordercolor },
-    [SchemeTagsSel]  = { tagsel_fgcolor, tagsel_bgcolor, tagsel_bordercolor },
+    [SchemeNorm]     = { normfgcolor,      normbgcolor,      normbordercolor },
+    [SchemeSel]      = { selfgcolor,       selbgcolor,       selbordercolor },
+    [SchemeStatus]   = { statusfgcolor,    statusbgcolor,    statusbordercolor },
+    [SchemeTagsSel]  = { tagsel_fgcolor,   tagsel_bgcolor,   tagsel_bordercolor },
     [SchemeTagsNorm] = { tagsnorm_fgcolor, tagsnorm_bgcolor, tagsnorm_bordercolor },
-    [SchemeInfoSel]  = { infosel_fgcolor, infosel_bgcolor, infosel_bordercolor },
+    [SchemeInfoSel]  = { infosel_fgcolor,  infosel_bgcolor,  infosel_bordercolor },
     [SchemeInfoNorm] = { infonorm_fgcolor, infonorm_bgcolor, infonorm_bordercolor },
 };
 
@@ -110,7 +104,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_red1, "-nf", col_gray3, "-sb", col_red2, "-sf", col_white, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, NULL };
 static const char *termcmd[]  = { "st", NULL };
 
 /* Xresources preferences */

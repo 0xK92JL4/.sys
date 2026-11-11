@@ -7,7 +7,9 @@
 #include <strings.h>
 #include <time.h>
 #include <unistd.h>
+#include <limits.h>
 
+#include <X11/Xresource.h>
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
@@ -56,6 +58,91 @@ static Clr *scheme[SchemeLast];
 
 static int (*fstrncmp)(const char *, const char *, size_t) = strncmp;
 static char *(*fstrstr)(const char *, const char *) = strstr;
+
+static const char *
+get_xresource(XrmDatabase db, const char *name, const char *class)
+{
+		char *type;
+		XrmValue value;
+
+		if (XrmGetResource(db, name, class, &type, &value))
+				return value.addr;
+		return NULL;
+}
+
+static void
+load_xresources(void)
+{
+	XrmDatabase db;
+	const char *value;
+	char *end;
+	long number;
+
+	XrmInitialize();
+	if (!(value = XResourceManagerString(dpy)))
+		return;
+	if (!(db = XrmGetStringDatabase(value)))
+		return;
+
+	if ((value = get_xresource(db, "dmenu.font", "Dmenu.Font")))
+		fonts[0] = value;
+	if ((value = get_xresource(db, "dmenu.prompt", "Dmenu.Prompt")))
+		prompt = value;
+
+	if ((value = get_xresource(db, "dmenu.foreground", "Dmenu.Foreground")))
+		colors[SchemeNorm][ColFg] = value;
+	if ((value = get_xresource(db, "dmenu.background", "Dmenu.Background")))
+		colors[SchemeNorm][ColBg] = value;
+
+	if ((value = get_xresource(db, "dmenu.foregroundSel", "Dmenu.ForegroundSel")))
+		colors[SchemeSel][ColFg] = value;
+	if ((value = get_xresource(db, "dmenu.backgroundSel", "Dmenu.BackgroundSel")))
+		colors[SchemeSel][ColBg] = value;
+
+	if ((value = get_xresource(db, "dmenu.foregroundOut", "Dmenu.ForegroundOut")))
+		colors[SchemeOut][ColFg] = value;
+	if ((value = get_xresource(db, "dmenu.backgroundOut", "Dmenu.BackgroundOut")))
+		colors[SchemeOut][ColBg] = value;
+
+	if ((value = get_xresource(db, "dmenu.topbar", "Dmenu.Topbar"))) {
+		number = strtol(value, &end, 10);
+		if (end != value && *end == '\0' && (number == 0 || number == 1))
+			topbar = (int)number;
+	}
+
+	if ((value = get_xresource(db, "dmenu.lines", "Dmenu.Lines"))) {
+		number = strtol(value, &end, 10);
+		if (end != value && *end == '\0' && number >= 0 && number <= INT_MAX)
+			lines = (unsigned int)number;
+	}
+}
+
+static void
+apply_cli_appearance(int argc, char *argv[])
+{
+	int i;
+
+	for (i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], "-b"))
+			topbar = 0;
+		else if (!strcmp(argv[i], "-l"))
+			lines = atoi(argv[++i]);
+		else if (!strcmp(argv[i], "-p"))
+			prompt = argv[++i];
+		else if (!strcmp(argv[i], "-fn"))
+			fonts[0] = argv[++i];
+		else if (!strcmp(argv[i], "-nb"))
+			colors[SchemeNorm][ColBg] = argv[++i];
+		else if (!strcmp(argv[i], "-nf"))
+			colors[SchemeNorm][ColFg] = argv[++i];
+		else if (!strcmp(argv[i], "-sb"))
+			colors[SchemeSel][ColBg] = argv[++i];
+		else if (!strcmp(argv[i], "-sf"))
+			colors[SchemeSel][ColFg] = argv[++i];
+		else if (!strcmp(argv[i], "-m") || !strcmp(argv[i], "-w"))
+			i++;
+	}
+}
 
 static unsigned int
 textw_clamp(const char *str, unsigned int n)
@@ -121,7 +208,7 @@ cistrstr(const char *h, const char *n)
 
 	for (; *h; ++h) {
 		for (i = 0; n[i] && tolower((unsigned char)n[i]) ==
-		            tolower((unsigned char)h[i]); ++i)
+                           tolower((unsigned char)h[i]); ++i)
 			;
 		if (n[i] == '\0')
 			return (char *)h;
@@ -219,7 +306,7 @@ grabkeyboard(void)
 	/* try to grab keyboard, we may have to wait for another process to ungrab */
 	for (i = 0; i < 1000; i++) {
 		if (XGrabKeyboard(dpy, DefaultRootWindow(dpy), True, GrabModeAsync,
-		                  GrabModeAsync, CurrentTime) == GrabSuccess)
+                                 GrabModeAsync, CurrentTime) == GrabSuccess)
 			return;
 		nanosleep(&ts, NULL);
 	}
@@ -765,6 +852,8 @@ main(int argc, char *argv[])
 		fputs("warning: no locale support\n", stderr);
 	if (!(dpy = XOpenDisplay(NULL)))
 		die("cannot open display");
+	load_xresources();
+	apply_cli_appearance(argc, argv);
 	screen = DefaultScreen(dpy);
 	root = RootWindow(dpy, screen);
 	if (!embed || !(parentwin = strtol(embed, NULL, 0)))
