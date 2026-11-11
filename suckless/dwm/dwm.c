@@ -257,6 +257,8 @@ static int load_xresources(void);
 static void resource_load(XrmDatabase db, char *name, enum resource_type rtype, void *dst);
 static void reload_xresources(void);
 static void setborderwidth(Client *c, unsigned int bw);
+static Pixmap getrootpixmap(void);
+static void updatewallpaper(void);
 
 /* variables */
 static const char broken[] = "broken";
@@ -290,6 +292,9 @@ static Display *dpy;
 static Drw *drw;
 static Monitor *mons, *selmon;
 static Window root, wmcheckwin;
+static Atom rootpmapatom, esetrootpmapatom;
+static Pixmap wallpaper;
+static int wallpaperhidden, wallpaperdirty;
 
 /* configuration, allows nested code to access above variables */
 #include "config.h"
@@ -414,6 +419,7 @@ arrange(Monitor *m)
 		restack(m);
 	} else for (m = mons; m; m = m->next)
 		arrangemon(m);
+	updatewallpaper();
 }
 
 void
@@ -424,14 +430,14 @@ arrangemon(Monitor *m)
 	strncpy(m->ltsymbol, m->lt[m->sellt]->symbol, sizeof m->ltsymbol);
 	if (m->lt[m->sellt]->arrange)
 		m->lt[m->sellt]->arrange(m);
-    else
-    {
-        for (c = m->clients; c; c = c->next)
-        {
-            if (ISVISIBLE(c) && !c->isfullscreen)
-                setborderwidth(c, fborderpx);
-        }
-    }
+	else
+	{
+		for (c = m->clients; c; c = c->next)
+		{
+			if (ISVISIBLE(c) && !c->isfullscreen)
+				setborderwidth(c, fborderpx);
+		}
+	}
 }
 
 void
@@ -460,7 +466,7 @@ buttonpress(XEvent *e)
 	click = ClkRootWin;
 	/* focus monitor if necessary */
 	if ((m = wintomon(ev->window)) && m != selmon
-	    && (focusonwheel || (ev->button != Button4 && ev->button != Button5))) {
+		&& (focusonwheel || (ev->button != Button4 && ev->button != Button5))) {
 		unfocus(selmon->sel, 1);
 		selmon = m;
 		focus(NULL);
@@ -757,19 +763,19 @@ drawbar(Monitor *m)
 			urg |= c->tags;
 	}
 	x = 0;
-    for (i = 0; i < LENGTH(tags); i++) {
-        w = TEXTW(tags[i]);
-        if (m->tagset[m->seltags] & 1 << i)
-            drw_setscheme(drw, tagscheme[1]);
-        else if (m == selmon && selmon->sel && selmon->sel->tags & 1 << i)
-            drw_setscheme(drw, tagscheme[3]);
-        else if (occ & 1 << i) 
-            drw_setscheme(drw, tagscheme[2]);
-        else
-            drw_setscheme(drw, tagscheme[0]);
-        drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], urg & 1 << i);
-        x += w;
-    }
+	for (i = 0; i < LENGTH(tags); i++) {
+		w = TEXTW(tags[i]);
+		if (m->tagset[m->seltags] & 1 << i)
+			drw_setscheme(drw, tagscheme[1]);
+		else if (m == selmon && selmon->sel && selmon->sel->tags & 1 << i)
+			drw_setscheme(drw, tagscheme[3]);
+		else if (occ & 1 << i) 
+			drw_setscheme(drw, tagscheme[2]);
+		else
+			drw_setscheme(drw, tagscheme[0]);
+		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], urg & 1 << i);
+		x += w;
+	}
 	w = TEXTW(m->ltsymbol);
 	drw_setscheme(drw, scheme[SchemeTagsNorm]);
 	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
@@ -896,6 +902,68 @@ getatomprop(Client *c, Atom prop)
 		XFree(p);
 	}
 	return atom;
+}
+
+static Pixmap
+getrootpixmap(void)
+{
+	Atom actual_type;
+	int actual_format;
+	unsigned long nitems, bytes_after;
+	unsigned char *data = NULL;
+	Pixmap pixmap = None;
+	Atom atoms[] = { rootpmapatom, esetrootpmapatom };
+	unsigned int i;
+
+	for (i = 0; i < LENGTH(atoms); i++) {
+		if (XGetWindowProperty(dpy, root, atoms[i], 0L, 1L,
+			False, XA_PIXMAP, &actual_type, &actual_format,
+			&nitems, &bytes_after, &data) == Success
+			&& actual_type == XA_PIXMAP
+			&& actual_format == 32
+			&& nitems == 1)
+			pixmap = *(Pixmap *)data;
+
+		if (data) {
+			XFree(data);
+			data = NULL;
+		}
+
+		if (pixmap != None)
+			break;
+	}
+
+	return pixmap;
+}
+
+static void
+updatewallpaper(void)
+{
+	Monitor *m;
+	Client *c;
+	int occupied = 0;
+
+	for (m = mons; m && !occupied; m = m->next) {
+		for (c = m->clients; c; c = c->next) {
+			if (ISVISIBLE(c)) {
+				occupied = 1;
+				break;
+			}
+		}
+	}
+
+	if (occupied) {
+		if (!wallpaperhidden) {
+			XSetWindowBackground(dpy, root, BlackPixel(dpy, screen));
+			XClearWindow(dpy, root);
+			wallpaperhidden = 1;
+		}
+	} else if (wallpaper != None && (wallpaperhidden || wallpaperdirty)) {
+		XSetWindowBackgroundPixmap(dpy, root, wallpaper);
+		XClearWindow(dpy, root);
+		wallpaperhidden = 0;
+		wallpaperdirty = 0;
+	}
 }
 
 int
@@ -1248,6 +1316,19 @@ propertynotify(XEvent *e)
 	Window trans;
 	XPropertyEvent *ev = &e->xproperty;
 
+	if (ev->window == root
+			&& (ev->atom == rootpmapatom || ev->atom == esetrootpmapatom)) {
+		if (ev->state == PropertyNewValue) {
+			Pixmap p = getrootpixmap();
+			if (p != None) {
+				wallpaper = p;
+				wallpaperdirty = 1;
+				wallpaperhidden = 0;
+				updatewallpaper();
+			}
+		}
+		return;
+	}
 	if (ev->window == root && ev->atom == XA_RESOURCE_MANAGER) {
 		if (ev->state == PropertyNewValue)
 			reload_xresources();
@@ -1363,25 +1444,20 @@ load_xresources(void)
 
 	if (!(display = XOpenDisplay(NULL)))
 		return 0;
-
 	resm = XResourceManagerString(display);
 	if (!resm) {
 		XCloseDisplay(display);
 		return 0;
 	}
-
 	db = XrmGetStringDatabase(resm);
 	if (!db) {
 		XCloseDisplay(display);
 		return 0;
 	}
-
 	for (p = resources; p < resources + LENGTH(resources); p++)
 		resource_load(db, p->name, p->type, p->dst);
-
 	XrmDestroyDatabase(db);
 	XCloseDisplay(display);
-
 	return 1;
 }
 
@@ -1395,36 +1471,30 @@ reload_xresources(void)
 
 	if (!load_xresources())
 		return;
-
 	/* Recreate normal dwm color schemes */
 	for (i = 0; i < LENGTH(colors); i++) {
 		drw_scm_free(drw, scheme[i], 3);
 		scheme[i] = drw_scm_create(drw, colors[i], 3);
 	}
-
 	/* Recreate tag color schemes */
 	for (i = 0; i < LENGTH(tagsel); i++) {
 		drw_scm_free(drw, tagscheme[i], 2);
 		tagscheme[i] = drw_scm_create(drw, tagsel[i], 2);
 	}
-
 	/* Apply settings copied into monitor structures */
 	for (m = mons; m; m = m->next) {
 		m->mfact = mfact;
 		m->nmaster = MAX(0, nmaster);
 		m->showbar = showbar;
 		m->topbar = topbar;
-
 		updatebarpos(m);
 		XMoveResizeWindow(dpy, m->barwin,
 			m->wx, m->by, m->ww, bh);
-
 		for (c = m->clients; c; c = c->next) {
 			/* Update floating window border widths */
 			if (!c->isfullscreen
 			&& (c->isfloating || !m->lt[m->sellt]->arrange))
 				setborderwidth(c, fborderpx);
-
 			/* Update every client's border color */
 			XSetWindowBorder(dpy, c->win,
 				(m == selmon && c == selmon->sel)
@@ -1432,7 +1502,6 @@ reload_xresources(void)
 				: scheme[SchemeNorm][ColBorder].pixel);
 		}
 	}
-
 	arrange(NULL);
 	focus(NULL);
 	XSync(dpy, False);
@@ -1461,21 +1530,12 @@ recttomon(int x, int y, int w, int h)
 static void
 setborderwidth(Client *c, unsigned int bw)
 {
-    int delta;
+	int delta;
 
-    if (!c || c->bw == bw)
-        return;
-
-    /*
-     * Preserve the outer window dimensions when changing
-     * the border width.
-     */
-    delta = 2 * ((int)bw - (int)c->bw);
-
-    resize(c, c->x, c->y,
-        MAX(1, c->w - delta),
-        MAX(1, c->h - delta),
-        bw, 0);
+	if (!c || c->bw == bw)
+		return;
+	delta = 2 * ((int)bw - (int)c->bw);
+	resize(c, c->x, c->y, MAX(1, c->w - delta), MAX(1, c->h - delta), bw, 0);
 }
 
 void
@@ -1702,7 +1762,7 @@ setfullscreen(Client *c, int fullscreen)
 		c->y = c->oldy;
 		c->w = c->oldw;
 		c->h = c->oldh;
-        c->bw = c->isfloating ? fborderpx : borderpx;
+		c->bw = c->isfloating ? fborderpx : borderpx;
 		resizeclient(c, c->x, c->y, c->w, c->h, c->bw);
 		arrange(c->mon);
 	}
@@ -1779,6 +1839,8 @@ setup(void)
 	netatom[NetWMWindowType] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE", False);
 	netatom[NetWMWindowTypeDialog] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE_DIALOG", False);
 	netatom[NetClientList] = XInternAtom(dpy, "_NET_CLIENT_LIST", False);
+	rootpmapatom = XInternAtom(dpy, "_XROOTPMAP_ID", False);
+	esetrootpmapatom = XInternAtom(dpy, "ESETROOT_PMAP_ID", False);
 	/* init cursors */
 	cursor[CurNormal] = drw_cur_create(drw, XC_left_ptr);
 	cursor[CurResize] = drw_cur_create(drw, XC_sizing);
@@ -1812,6 +1874,8 @@ setup(void)
 		|LeaveWindowMask|StructureNotifyMask|PropertyChangeMask;
 	XChangeWindowAttributes(dpy, root, CWEventMask|CWCursor, &wa);
 	XSelectInput(dpy, root, wa.event_mask);
+	wallpaper = getrootpixmap();
+	wallpaperdirty = wallpaper != None;
 	grabkeys();
 	focus(NULL);
 }
@@ -2403,6 +2467,7 @@ main(int argc, char *argv[])
 		die("pledge");
 #endif /* __OpenBSD__ */
 	scan();
+	updatewallpaper();
 	run();
 	cleanup();
 	XCloseDisplay(dpy);
