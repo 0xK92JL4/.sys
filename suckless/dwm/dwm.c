@@ -945,7 +945,7 @@ updatewallpaper(void)
 
 	for (m = mons; m && !occupied; m = m->next) {
 		for (c = m->clients; c; c = c->next) {
-			if (ISVISIBLE(c)) {
+			if (ISVISIBLE(c) && (!c->isfloating || c->isfullscreen)) {
 				occupied = 1;
 				break;
 			}
