@@ -1,4 +1,6 @@
 /* See LICENSE for license details. */
+#include <stdio.h>
+#include <stdlib.h>
 #include <errno.h>
 #include <math.h>
 #include <limits.h>
@@ -14,6 +16,7 @@
 #include <X11/keysym.h>
 #include <X11/Xft/Xft.h>
 #include <X11/XKBlib.h>
+#include <X11/Xresource.h>
 
 char *argv0;
 #include "arg.h"
@@ -1145,6 +1148,83 @@ xicdestroy(XIC xim, XPointer client, XPointer call)
 	return 1;
 }
 
+static XrmDatabase xresources;
+
+static const char *
+xgetresource(const char *name, const char *class)
+{
+		char *type;
+		XrmValue value;
+
+		if (!xresources)
+				return NULL;
+
+		if (XrmGetResource(xresources, name, class, &type, &value)
+		&& value.addr)
+				return value.addr;
+
+		return NULL;
+}
+
+static void
+xloadresources(void)
+{
+		const char *value;
+		char name[32], class[32];
+		char *end;
+		long number;
+		int i;
+
+		XrmInitialize();
+
+		if (!(value = XResourceManagerString(xw.dpy)))
+				return;
+
+		if (!(xresources = XrmGetStringDatabase(value)))
+				return;
+
+		/* Font */
+		if ((value = xgetresource("st.font", "St.Font")))
+				font = (char *)value;
+
+		/* Window border */
+		if ((value = xgetresource("st.borderpx", "St.Borderpx"))) {
+				number = strtol(value, &end, 10);
+				if (end != value && *end == '\0'
+				&& number >= 0 && number <= INT_MAX)
+						borderpx = (int)number;
+		}
+
+		/* ANSI colors (0-254) */
+		for (i = 0; i < 255; i++) {
+				snprintf(name, sizeof(name), "st.color%d", i);
+				snprintf(class, sizeof(class), "St.Color%d", i);
+
+				if ((value = xgetresource(name, class)))
+						colorname[i] = value;
+		}
+
+		/* Default foreground and background */
+		if ((value = xgetresource("st.foreground", "St.Foreground")))
+				colorname[258] = value;
+
+		if ((value = xgetresource("st.background", "St.Background")))
+				colorname[259] = value;
+
+		/* Cursor colors */
+		if ((value = xgetresource("st.cursorColor", "St.CursorColor")))
+				colorname[256] = value;
+
+		if ((value = xgetresource("st.reverseCursorColor",
+								  "St.ReverseCursorColor")))
+				colorname[257] = value;
+
+		/* Custom background color (colorname[260]) */
+		if ((value = xgetresource("st.currentBackground",
+								  "St.CurrentBackground")))
+				colorname[260] = value;
+}
+
 void
 xinit(int cols, int rows)
 {
@@ -1158,6 +1238,8 @@ xinit(int cols, int rows)
 		die("can't open display\n");
 	xw.scr = XDefaultScreen(xw.dpy);
 	xw.vis = XDefaultVisual(xw.dpy, xw.scr);
+
+	xloadresources();
 
 	/* font */
 	if (!FcInit())
