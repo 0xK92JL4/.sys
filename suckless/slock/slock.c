@@ -18,6 +18,7 @@
 #include <X11/keysym.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#include <X11/Xresource.h>
 
 #include "arg.h"
 #include "util.h"
@@ -45,6 +46,47 @@ struct xrandr {
 };
 
 #include "config.h"
+
+static XrmDatabase xresources;
+
+static const char *
+xgetresource(const char *name, const char *class)
+{
+	char *type;
+	XrmValue value;
+
+	if (!xresources)
+		return NULL;
+
+	if (XrmGetResource(xresources, name, class, &type, &value)
+	&& value.addr)
+		return value.addr;
+
+	return NULL;
+}
+
+static void
+xloadresources(Display *dpy)
+{
+	const char *value;
+
+	XrmInitialize();
+
+	if (!(value = XResourceManagerString(dpy)))
+		return;
+
+	if (!(xresources = XrmGetStringDatabase(value)))
+		return;
+
+	if ((value = xgetresource("slock.init", "Slock.Init")))
+		colorname[INIT] = value;
+
+	if ((value = xgetresource("slock.input", "Slock.Input")))
+		colorname[INPUT] = value;
+
+	if ((value = xgetresource("slock.failed", "Slock.Failed")))
+		colorname[FAILED] = value;
+}
 
 static void
 die(const char *errstr, ...)
@@ -346,6 +388,8 @@ main(int argc, char **argv) {
 
 	if (!(dpy = XOpenDisplay(NULL)))
 		die("slock: cannot open display\n");
+
+	xloadresources(dpy);
 
 	/* drop privileges */
 	if (setgroups(0, NULL) < 0)
