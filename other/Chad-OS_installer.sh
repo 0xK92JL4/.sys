@@ -155,7 +155,7 @@ pacman -Syu --noconfirm \
     discord dunst firefox fontconfig freetype2 glfw htop \
     keepassxc libmad libreoffice-fresh libx11 libxft libxinerama \
     lldb man-db man-pages mupdf noto-fonts-cjk noto-fonts-emoji \
-    ntfs-3g numlockx openssh pacman-contrib pavucontrol picard
+    ntfs-3g numlockx openssh pacman-contrib pavucontrol picard \
     playerctl pulseaudio pulseaudio-alsa pulseaudio-equalizer \
     rclone restic tree unclutter unzip valgrind vim xbindkeys xclip \
     xf86-video-vesa xorg xorg-xinit xwallpaper zip zoxide
