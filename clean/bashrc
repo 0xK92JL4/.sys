@@ -1,0 +1,12 @@
+
+# Stop if non-interactive
+[[ $- != *i* ]] && return
+
+# Load config files
+conf_dir="${XDG_CONFIG_HOME:-$HOME/.config}/shell"
+for f in "$conf_dir"/{exports,aliases,functions,prompt,integrations}.sh; do
+    [ -r "$f" ] && . "$f"
+done
+
+unset conf_dir f
+
