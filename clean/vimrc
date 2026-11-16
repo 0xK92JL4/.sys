@@ -1,0 +1,24 @@
+
+" Load config files
+let s:config_home = empty($XDG_CONFIG_HOME)
+            \ ? expand('~/.config')
+            \ : expand($XDG_CONFIG_HOME)
+
+let s:conf_dir = s:config_home . '/vim'
+
+for s:file in [
+            \ 'options.vim',
+            \ 'filetypes.vim',
+            \ 'functions.vim',
+            \ 'commands.vim',
+            \ 'mappings.vim',
+            \ 'autocmds.vim'
+            \ ]
+    let s:path = s:conf_dir . '/' . s:file
+    if filereadable(s:path)
+        execute 'source' fnameescape(s:path)
+    endif
+endfor
+
+unlet s:config_home s:conf_dir s:file s:path
+
