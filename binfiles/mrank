@@ -1,0 +1,3 @@
+#!/bin/env bash
+
+music-cli rank $1 --current --notify

@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+ytmp3() {
+    if [[ $# -ne 1 ]]; then
+        echo "Usage: ytmp3 <youtube-url>" >&2
+        return 1
+    fi
+
+    if ! command -v yt-dlp >/dev/null || ! command -v ffmpeg >/dev/null; then
+        echo "Error: yt-dlp and ffmpeg are required." >&2
+        return 1
+    fi
+
+    yt-dlp \
+        --extract-audio \
+        --audio-format mp3 \
+        --audio-quality 0 \
+        --output "%(title)s.%(ext)s" \
+        --no-playlist \
+        "$1"
+}
